@@ -8,7 +8,8 @@ public class PlayerJumpState : PlayerState
     public override void Enter()
     {
         base.Enter();
-        rb.velocity = new Vector2 (rb.velocity.x, player.jumpForce);
+        //rb.velocity = new Vector2 (rb.velocity.x, player.jumpForce);
+        player.SetVelocity(rb.velocity.x, player.jumpForce);
     }
 
     public override void Exit()
@@ -19,6 +20,11 @@ public class PlayerJumpState : PlayerState
     public override void Update()
     {
         base.Update();
+
+        if (horizontal != 0)
+        {
+            player.SetVelocity(horizontal * player.moveSpeed * 0.8f, rb.velocity.y);
+        }
 
         if (rb.velocity.y < 0)
         {

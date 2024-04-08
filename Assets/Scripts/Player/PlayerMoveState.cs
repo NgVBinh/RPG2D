@@ -20,7 +20,7 @@ public class PlayerMoveState : PlayerGroundedState
     {
         base.Update();
 
-        player.SetVelocity(new Vector2(horizontal*player.moveSpeed,rb.velocity.y));
+        player.SetVelocity(horizontal*player.moveSpeed,rb.velocity.y);
 
         if (horizontal==0)
         {
