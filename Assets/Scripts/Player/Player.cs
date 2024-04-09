@@ -1,7 +1,11 @@
+using System.Collections;
 using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    [Header("Attack details")]
+    public Vector2[] attackMovement;
+    public bool isBusy { get; private set; }
     [Header("Move Infor")]
     public float moveSpeed = 1f;
     public float jumpForce = 1f;
@@ -37,6 +41,7 @@ public class Player : MonoBehaviour
     public PlayerDashState dashState { get; private set; }
     public PlayerWallSlideState wallSlideState { get; private set; }
     public PlayerWallJumpState wallJumpState { get; private set; }
+    public PlayerPrimaryAttackState attackState { get; private set; }
     #endregion
     private void Awake()
     {
@@ -49,6 +54,7 @@ public class Player : MonoBehaviour
         dashState = new PlayerDashState(this, stateMachine, "Dash");
         wallSlideState = new PlayerWallSlideState(this, stateMachine, "WallSlide");
         wallJumpState = new PlayerWallJumpState(this, stateMachine, "Jump");
+        attackState = new PlayerPrimaryAttackState(this, stateMachine, "Attack");
     }
     // Start is called before the first frame update
     private void Start()
@@ -65,17 +71,59 @@ public class Player : MonoBehaviour
         PlayerDashController();
     }
 
+    public void AnimationTrigger()
+    {
+        stateMachine.currentState.AnimationFinishTrigger();
+    }
+
+    public IEnumerator BusyFor(float second)
+    {
+        isBusy = true;
+        yield return new WaitForSeconds(second);
+        isBusy = false;
+    }
+
+
+
+    private void PlayerDashController()
+    {
+        dashTimer -= Time.deltaTime;
+        if (WallDetected()) return;
+
+        if (Input.GetKeyDown(KeyCode.LeftShift) && dashTimer < 0)
+        {
+            dashDir = Input.GetAxisRaw("Horizontal");
+
+            if (dashDir == 0) dashDir = facingDir;
+
+            stateMachine.ChangeState(dashState);
+            dashTimer = dashCooldown;
+        }
+    }
+
+    #region Velocity
     public void SetVelocity(float xInput, float yInput)
     {
         rb.velocity = new Vector2(xInput, yInput);
         FlipController(xInput);
     }
+    public void VelocityZero() => rb.velocity = Vector2.zero;
+    #endregion
 
-
+    #region Colisions
     public bool GroundDetected() => Physics2D.Raycast(groundCheckTransform.position, Vector2.down, groundCheckDistance, WhatIsground);
 
     public bool WallDetected() => Physics2D.Raycast(wallCheckTransform.position, Vector2.right * facingDir, wallCheckDistance, WhatIsground);
 
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawLine(groundCheckTransform.position, new Vector3(groundCheckTransform.position.x, groundCheckTransform.position.y - groundCheckDistance, 0));
+
+        Gizmos.DrawLine(wallCheckTransform.position, new Vector3(wallCheckTransform.position.x + wallCheckDistance, wallCheckTransform.position.y));
+    }
+    #endregion
+
+    #region Flip
     public void Flip()
     {
         facingDir *= -1;
@@ -94,29 +142,5 @@ public class Player : MonoBehaviour
             Flip();
         }
     }
-
-    private void PlayerDashController()
-    {
-        dashTimer -= Time.deltaTime;
-        if (WallDetected()) return;
-
-        if (Input.GetKeyDown(KeyCode.LeftShift) && dashTimer < 0)
-        {
-            dashDir = Input.GetAxisRaw("Horizontal");
-
-            if (dashDir == 0) dashDir = facingDir;
-
-            stateMachine.ChangeState(dashState);
-            dashTimer = dashCooldown;
-        }
-    }
-
-
-    private void OnDrawGizmos()
-    {
-        Gizmos.DrawLine(groundCheckTransform.position, new Vector3(groundCheckTransform.position.x, groundCheckTransform.position.y - groundCheckDistance, 0));
-
-        Gizmos.DrawLine(wallCheckTransform.position, new Vector3(wallCheckTransform.position.x + wallCheckDistance, wallCheckTransform.position.y));
-    }
-
+    #endregion
 }
