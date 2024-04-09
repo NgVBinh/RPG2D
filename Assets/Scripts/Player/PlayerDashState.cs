@@ -29,7 +29,10 @@ public class PlayerDashState : PlayerState
                 stateMachine.ChangeState(player.airState);
         }
 
-
+        if (!player.GroundDetected()&& player.WallDetected())
+        {
+            stateMachine.ChangeState(player.wallSlideState);
+        }
     }
 
  }

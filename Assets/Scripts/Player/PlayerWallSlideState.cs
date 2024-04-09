@@ -1,4 +1,5 @@
 
+using UnityEngine;
 using UnityEngine.UI;
 
 public class PlayerWallSlideState : PlayerState
@@ -21,6 +22,11 @@ public class PlayerWallSlideState : PlayerState
     {
         base.Update();
 
+        if(Input.GetKey(KeyCode.Space)) {
+            stateMachine.ChangeState(player.wallJumpState);
+            return;
+        }
+
         if (player.GroundDetected())
         {
             stateMachine.ChangeState(player.idleState);
@@ -31,6 +37,7 @@ public class PlayerWallSlideState : PlayerState
             stateMachine.ChangeState(player.airState);
         }
 
+        // slide speed controll
         if (vertical < 0)
         {
             rb.velocity = new UnityEngine.Vector2(0, rb.velocity.y);

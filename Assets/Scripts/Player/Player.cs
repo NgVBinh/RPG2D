@@ -4,14 +4,14 @@ public class Player : MonoBehaviour
 {
     [Header("Move Infor")]
     public float moveSpeed = 1f;
-    public float jumpForce  = 1f;
+    public float jumpForce = 1f;
 
     [Header("Dash Infor")]
     [SerializeField] private float dashCooldown;
     private float dashTimer;
     public float dashDir;
-    public float dashSpeed ;
-    public float dashDuration ;
+    public float dashSpeed;
+    public float dashDuration;
 
     [Header("Collision infor")]
     [SerializeField] private Transform groundCheckTransform;
@@ -24,7 +24,7 @@ public class Player : MonoBehaviour
     private bool isFacingRight = true;
 
     #region Components
-    public Animator animator {  get; private set; }
+    public Animator animator { get; private set; }
     public Rigidbody2D rb { get; private set; }
     #endregion
 
@@ -36,6 +36,7 @@ public class Player : MonoBehaviour
     public PlayerAirState airState { get; private set; }
     public PlayerDashState dashState { get; private set; }
     public PlayerWallSlideState wallSlideState { get; private set; }
+    public PlayerWallJumpState wallJumpState { get; private set; }
     #endregion
     private void Awake()
     {
@@ -47,32 +48,33 @@ public class Player : MonoBehaviour
         airState = new PlayerAirState(this, stateMachine, "Jump");
         dashState = new PlayerDashState(this, stateMachine, "Dash");
         wallSlideState = new PlayerWallSlideState(this, stateMachine, "WallSlide");
+        wallJumpState = new PlayerWallJumpState(this, stateMachine, "Jump");
     }
     // Start is called before the first frame update
     private void Start()
     {
         animator = GetComponentInChildren<Animator>();
         rb = GetComponent<Rigidbody2D>();
-        stateMachine.Initialize(idleState);    
+        stateMachine.Initialize(idleState);
     }
 
     // Update is called once per frame
     private void Update()
     {
         stateMachine.currentState.Update();
-        CheckPlayerDash();
+        PlayerDashController();
     }
 
-    public void SetVelocity(float xInput,float yInput)
+    public void SetVelocity(float xInput, float yInput)
     {
-        rb.velocity = new Vector2(xInput,yInput);
+        rb.velocity = new Vector2(xInput, yInput);
         FlipController(xInput);
     }
 
 
     public bool GroundDetected() => Physics2D.Raycast(groundCheckTransform.position, Vector2.down, groundCheckDistance, WhatIsground);
 
-    public bool WallDetected()=> Physics2D.Raycast(wallCheckTransform.position,Vector2.right*facingDir,wallCheckDistance, WhatIsground);
+    public bool WallDetected() => Physics2D.Raycast(wallCheckTransform.position, Vector2.right * facingDir, wallCheckDistance, WhatIsground);
 
     public void Flip()
     {
@@ -83,33 +85,36 @@ public class Player : MonoBehaviour
 
     public void FlipController(float xInput)
     {
-        if(xInput>0 && !isFacingRight)
+        if (xInput > 0 && !isFacingRight)
         {
             Flip();
-        }else if(xInput<0 && isFacingRight)
+        }
+        else if (xInput < 0 && isFacingRight)
         {
             Flip();
         }
     }
 
-    private void CheckPlayerDash()
+    private void PlayerDashController()
     {
-        dashTimer-=Time.deltaTime;
+        dashTimer -= Time.deltaTime;
+        if (WallDetected()) return;
 
-        if (Input.GetKeyDown(KeyCode.LeftShift) && dashTimer<0)
+        if (Input.GetKeyDown(KeyCode.LeftShift) && dashTimer < 0)
         {
             dashDir = Input.GetAxisRaw("Horizontal");
 
-            if(dashDir==0) dashDir=facingDir;
+            if (dashDir == 0) dashDir = facingDir;
 
             stateMachine.ChangeState(dashState);
             dashTimer = dashCooldown;
         }
     }
 
+
     private void OnDrawGizmos()
     {
-        Gizmos.DrawLine(groundCheckTransform.position, new Vector3(groundCheckTransform.position.x, groundCheckTransform.position.y - groundCheckDistance,0));
+        Gizmos.DrawLine(groundCheckTransform.position, new Vector3(groundCheckTransform.position.x, groundCheckTransform.position.y - groundCheckDistance, 0));
 
         Gizmos.DrawLine(wallCheckTransform.position, new Vector3(wallCheckTransform.position.x + wallCheckDistance, wallCheckTransform.position.y));
     }
