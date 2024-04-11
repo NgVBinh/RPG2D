@@ -1,9 +1,9 @@
-public class SkeletonMoveState : EnemyState
+using UnityEngine;
+
+public class SkeletonMoveState : SkeletonGroundState
 {
-    private Skeleton_Enemy enemySkeleton;
-    public SkeletonMoveState(Enemy enemy, EnemyStateMachine enemyState, string animationName, Skeleton_Enemy enemySkeleton) : base(enemy, enemyState, animationName)
+    public SkeletonMoveState(Enemy enemy, EnemyStateMachine stateMachine, string animationName, Skeleton_Enemy skeleton) : base(enemy, stateMachine, animationName, skeleton)
     {
-        this.enemySkeleton = enemySkeleton;
     }
 
     public override void Enter()
@@ -20,12 +20,12 @@ public class SkeletonMoveState : EnemyState
     {
         base.Update();
 
-        enemySkeleton.SetVelocity(enemySkeleton.moveSpeed * enemySkeleton.facingDir, enemySkeleton.rb.velocity.y);
+        skeleton.SetVelocity(skeleton.moveSpeed * skeleton.facingDir, skeleton.rb.velocity.y);
 
-        if(!enemySkeleton.GroundDetected()|| enemySkeleton.WallDetected())
+        if(!skeleton.GroundDetected()|| skeleton.WallDetected())
         {
-            stateMachine.ChangeState(enemySkeleton.idleState);
-            enemySkeleton.Flip();
+            stateMachine.ChangeState(skeleton.idleState);
+            skeleton.Flip();
         }
     }
 }

@@ -2,19 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SkeletonIdleState : EnemyState
+public class SkeletonIdleState : SkeletonGroundState
 {
-    private Skeleton_Enemy enemySkeleton;
-    public SkeletonIdleState(Enemy enemy, EnemyStateMachine enemyState, string animationName, Skeleton_Enemy skeleton) : base(enemy, enemyState, animationName)
+    public SkeletonIdleState(Enemy enemy, EnemyStateMachine stateMachine, string animationName, Skeleton_Enemy skeleton) : base(enemy, stateMachine, animationName, skeleton)
     {
-        this.enemySkeleton = skeleton;
     }
 
     public override void Enter()
     {
         base.Enter();
-        enemySkeleton.VelocityZero();
-        stateTimer = enemySkeleton.idleTime;
+        skeleton.VelocityZero();
+        stateTimer = skeleton.idleTime;
     }
 
     public override void Exit()
@@ -27,7 +25,7 @@ public class SkeletonIdleState : EnemyState
         base.Update();
         if (stateTimer < 0)
         {
-            stateMachine.ChangeState(enemySkeleton.moveState);
+            stateMachine.ChangeState(skeleton.moveState);
         }
     }
 }
