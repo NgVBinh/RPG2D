@@ -37,6 +37,11 @@ public class PlayerWallSlideState : PlayerState
             stateMachine.ChangeState(player.airState);
         }
 
+        if(!player.GroundDetected() && !player.WallDetected())
+        {
+            stateMachine.ChangeState(player.airState);
+        }
+
         // slide speed controll
         if (vertical < 0)
         {

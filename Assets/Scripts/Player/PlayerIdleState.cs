@@ -24,6 +24,7 @@ public class PlayerIdleState : PlayerGroundedState
         if(horizontal!=0 && !player.isBusy) {
             stateMachine.ChangeState(player.moveState);
         }
+
     }
 
     
