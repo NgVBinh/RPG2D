@@ -5,6 +5,7 @@ public class Player : Entity
 {
     [Header("Attack details")]
     public Vector2[] attackMovement;
+    public float counterDuration;
     public bool isBusy { get; private set; }
     [Header("Move Infor")]
     public float moveSpeed = 1f;
@@ -29,6 +30,7 @@ public class Player : Entity
     public PlayerWallSlideState wallSlideState { get; private set; }
     public PlayerWallJumpState wallJumpState { get; private set; }
     public PlayerPrimaryAttackState attackState { get; private set; }
+    public PlayerCounterAttackState counterAttackState { get; private set; }
     #endregion
     protected override void Awake()
     {
@@ -44,6 +46,7 @@ public class Player : Entity
         wallSlideState = new PlayerWallSlideState(this, stateMachine, "WallSlide");
         wallJumpState = new PlayerWallJumpState(this, stateMachine, "Jump");
         attackState = new PlayerPrimaryAttackState(this, stateMachine, "Attack");
+        counterAttackState = new PlayerCounterAttackState(this, stateMachine, "CounterAttack");
     }
     // Start is called before the first frame update
     protected override void Start()
@@ -91,6 +94,11 @@ public class Player : Entity
 
             stateMachine.ChangeState(dashState);
             dashTimer = dashCooldown;
+        }
+
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            stateMachine.ChangeState(counterAttackState);
         }
     }
 }
