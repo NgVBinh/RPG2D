@@ -18,7 +18,7 @@ public class Player : Entity
     public float dashDir { get; private set; }
     public float dashSpeed;
 
-
+    public SkillManager skill;
 
     #region State
     public PlayerStateMachine stateMachine;
@@ -55,7 +55,7 @@ public class Player : Entity
         
         stateMachine.Initialize(idleState);
 
-        
+        skill = SkillManager.instance;
     }
 
     // Update is called once per frame
