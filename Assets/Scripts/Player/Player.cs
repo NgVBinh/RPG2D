@@ -11,12 +11,12 @@ public class Player : Entity
     public float moveSpeed = 1f;
     public float jumpForce = 1f;
 
+    //[SerializeField] private float dashCooldown;
+    //private float dashTimer;
     [Header("Dash Infor")]
-    [SerializeField] private float dashCooldown;
-    private float dashTimer;
+    public float dashDuration;
     public float dashDir { get; private set; }
     public float dashSpeed;
-    public float dashDuration;
 
 
 
@@ -83,20 +83,16 @@ public class Player : Entity
 
     private void PlayerDashController()
     {
-        dashTimer -= Time.deltaTime;
         if (WallDetected()) return;
 
-        if (Input.GetKeyDown(KeyCode.LeftShift) && dashTimer < 0)
+        if (Input.GetKeyDown(KeyCode.LeftShift) && SkillManager.instance.dashSkill.CanUseSkill())
         {
             dashDir = Input.GetAxisRaw("Horizontal");
-
             if (dashDir == 0) dashDir = facingDir;
-
             stateMachine.ChangeState(dashState);
-            dashTimer = dashCooldown;
         }
 
-        if (Input.GetKeyDown(KeyCode.K))
+        if (Input.GetKeyDown(KeyCode.E))
         {
             stateMachine.ChangeState(counterAttackState);
         }
