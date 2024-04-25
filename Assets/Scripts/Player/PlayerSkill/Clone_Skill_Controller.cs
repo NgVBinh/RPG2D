@@ -69,22 +69,26 @@ public class Clone_Skill_Controller : MonoBehaviour
         float closestDistance = Mathf.Infinity;
         Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, 10);
 
-        foreach (Collider2D collider in colliders) 
-        { 
-            if (collider.GetComponent<Enemy>() != null) 
+        foreach (Collider2D collider in colliders)
+        {
+            if (collider.GetComponent<Enemy>() != null)
             {
                 float distanceToEnemy = Vector2.Distance(transform.position, collider.transform.position);
-                if(distanceToEnemy < closestDistance)
+                if (distanceToEnemy < closestDistance)
                 {
                     closestDistance = distanceToEnemy;
                     closestEnemy = collider.transform;
                 }
-            } 
+            }
         }
 
-        if(transform.position.x > closestEnemy.transform.position.x)
+        if (closestEnemy != null)
         {
-            transform.Rotate(0, 180, 0);
+            if (transform.position.x > closestEnemy.transform.position.x)
+            {
+                transform.Rotate(0, 180, 0);
+            }
+
         }
     }
 }

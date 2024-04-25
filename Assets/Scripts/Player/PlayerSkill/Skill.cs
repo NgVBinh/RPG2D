@@ -7,6 +7,13 @@ public class Skill : MonoBehaviour
     [SerializeField] protected float coolDown;
     protected float coolDownTimer;
 
+    protected Player player;
+
+    protected virtual void Start()
+    {
+        player = PlayerManager.instance.player;
+    }
+
     // Update is called once per frame
     protected virtual void Update()
     {

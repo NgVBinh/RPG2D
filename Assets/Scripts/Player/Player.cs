@@ -1,4 +1,5 @@
 using System.Collections;
+using UnityEditor;
 using UnityEngine;
 
 public class Player : Entity
@@ -10,6 +11,8 @@ public class Player : Entity
     [Header("Move Infor")]
     public float moveSpeed = 1f;
     public float jumpForce = 1f;
+    [Space]
+    public float forceReturnSword;
 
     //[SerializeField] private float dashCooldown;
     //private float dashTimer;
@@ -18,8 +21,8 @@ public class Player : Entity
     public float dashDir { get; private set; }
     public float dashSpeed;
 
-    public SkillManager skill;
-
+    public SkillManager skill { get; private set; }
+    public GameObject sword {  get; private set; }
     #region State
     public PlayerStateMachine stateMachine;
     public PlayerIdleState idleState { get; private set; }
@@ -31,6 +34,8 @@ public class Player : Entity
     public PlayerWallJumpState wallJumpState { get; private set; }
     public PlayerPrimaryAttackState attackState { get; private set; }
     public PlayerCounterAttackState counterAttackState { get; private set; }
+    public PlayerAimSwordState aimSwordState { get; private set; }
+    public PlayerCatchSwordState catchSwordState { get; private set; }
     #endregion
     protected override void Awake()
     {
@@ -47,6 +52,8 @@ public class Player : Entity
         wallJumpState = new PlayerWallJumpState(this, stateMachine, "Jump");
         attackState = new PlayerPrimaryAttackState(this, stateMachine, "Attack");
         counterAttackState = new PlayerCounterAttackState(this, stateMachine, "CounterAttack");
+        aimSwordState = new PlayerAimSwordState(this, stateMachine, "AimSword");
+        catchSwordState = new PlayerCatchSwordState(this, stateMachine, "CatchSword");
     }
     // Start is called before the first frame update
     protected override void Start()
@@ -96,5 +103,16 @@ public class Player : Entity
         {
             stateMachine.ChangeState(counterAttackState);
         }
+    }
+
+    public void AssignNewSword(GameObject newSword)
+    {
+        sword = newSword;
+    }
+
+    public void CatchTheSword()
+    {
+        stateMachine.ChangeState(catchSwordState);
+        sword = null;
     }
 }
