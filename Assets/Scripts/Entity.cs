@@ -73,6 +73,7 @@ public class Entity : MonoBehaviour
             entityFX.StartCoroutine("HitEffect");
         }
         StartCoroutine("HitKnockback");
+        Debug.Log(transform.name + " be damaged");
     }
 
     protected virtual void OnDrawGizmos()
