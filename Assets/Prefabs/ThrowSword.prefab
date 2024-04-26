@@ -111,6 +111,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   returnSpeed: 10
   speedBounce: 15
+  distanceCanBounce: 8
 --- !u!1 &5580571295070686113
 GameObject:
   m_ObjectHideFlags: 0
