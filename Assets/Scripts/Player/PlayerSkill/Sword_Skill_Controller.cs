@@ -7,7 +7,9 @@ public class Sword_Skill_Controller : MonoBehaviour
     private Rigidbody2D rb;
     private CircleCollider2D circleCollider;
 
-    [SerializeField] private float returnSpeed;
+    private float freezeTime;
+
+    private float returnSpeed;
 
     private bool canRotate = true;
     private bool isReturning;
@@ -15,8 +17,8 @@ public class Sword_Skill_Controller : MonoBehaviour
     private Player player;
 
     [Header("Bounce Infor")]
-    [SerializeField] private float speedBounce;
-    [SerializeField] private float distanceCanBounce;
+    private float speedBounce;
+    private float distanceCanBounce;
     private bool isBouncing;
     private int amountOfBounce;
     private List<Transform> enemysTransform;
@@ -56,6 +58,8 @@ public class Sword_Skill_Controller : MonoBehaviour
         {
             spinDirection = Mathf.Clamp(rb.velocity.x,-1,1);
         }
+
+        Invoke("DestroyMe", 7f);
     }
 
     private void Update()
@@ -72,6 +76,11 @@ public class Sword_Skill_Controller : MonoBehaviour
         SwordSpinLogic();
     }
 
+    private void DestroyMe()
+    {
+        Destroy(gameObject);
+    }
+
     private void SwordReturnPlayer()
     {
         if (isReturning)
@@ -81,7 +90,7 @@ public class Sword_Skill_Controller : MonoBehaviour
             if (Vector2.Distance(transform.position, player.transform.position) < 1)
             {
                 player.CatchTheSword();
-                Destroy(gameObject);
+                DestroyMe();
             }
         }
     }
@@ -94,7 +103,7 @@ public class Sword_Skill_Controller : MonoBehaviour
 
             if (Vector2.Distance(transform.position, enemysTransform[enemyTarget].position) < 0.05f)
             {
-                enemysTransform[enemyTarget].GetComponent<Enemy>().TakeDamage();
+                SwordSkillDamage(enemysTransform[enemyTarget].GetComponent<Enemy>());
 
                 enemyTarget++;
                 amountOfBounce--;
@@ -142,7 +151,7 @@ public class Sword_Skill_Controller : MonoBehaviour
                     {
                         if (hit.GetComponent<Enemy>() != null)
                         {
-                            hit.GetComponent<Enemy>().TakeDamage();
+                            SwordSkillDamage(hit.GetComponent<Enemy>());
                         }
                     }
                 }
@@ -165,17 +174,21 @@ public class Sword_Skill_Controller : MonoBehaviour
     }
 
     // set up sword
-    public void SetupSword(Vector2 launchDir, float swordGravity)
+    public void SetupSword(Vector2 launchDir, float swordGravity,float freezeTime,float returnSpeed)
     {
         rb.velocity = launchDir;
         rb.gravityScale = swordGravity;
+        this.freezeTime = freezeTime;
+        this.returnSpeed = returnSpeed;
     }
 
-    public void SetupBounce(bool isBouncing, int amountOfBounce)
+    public void SetupBounce(bool isBouncing, int amountOfBounce,float speedBounce,float distanceCanBounce)
     {
         enemysTransform = new List<Transform>();
         this.isBouncing = isBouncing;
         this.amountOfBounce = amountOfBounce;
+        this.speedBounce = speedBounce;
+        this.distanceCanBounce = distanceCanBounce;
     }
 
     public void SetupPierce(int amountOfPierce)
@@ -198,6 +211,7 @@ public class Sword_Skill_Controller : MonoBehaviour
         if (isBouncing)
         {
             EnemysTargetForBounce(collision);
+
         }
 
         if (isSpinning)
@@ -206,7 +220,11 @@ public class Sword_Skill_Controller : MonoBehaviour
             return;
         }
 
-        collision.GetComponent<Enemy>()?.TakeDamage();
+        if (collision.GetComponent<Enemy>() != null)
+        {
+            Enemy enemy = collision.GetComponent<Enemy>();
+            SwordSkillDamage(enemy);
+        }
 
         if (amountOfPierce > 0 && collision.GetComponent<Enemy>() != null)
         {
@@ -215,6 +233,12 @@ public class Sword_Skill_Controller : MonoBehaviour
         }
 
         StuckInto(collision);
+    }
+
+    private void SwordSkillDamage(Enemy enemy)
+    {
+        enemy.TakeDamage();
+        enemy.StartCoroutine("FreezeTimeFor", freezeTime);
     }
 
     private void StuckInto(Collider2D collision)

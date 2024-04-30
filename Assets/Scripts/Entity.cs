@@ -26,6 +26,8 @@ public class Entity : MonoBehaviour
     public Animator animator { get; private set; }
     public Rigidbody2D rb { get; private set; }
     public EntityFX entityFX { get; private set; }
+
+    public SpriteRenderer spriteRenderer { get; private set; }
     #endregion
 
 
@@ -39,6 +41,7 @@ public class Entity : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
 
         entityFX = GetComponentInChildren<EntityFX>();
+        spriteRenderer = GetComponentInChildren<SpriteRenderer>();
     }
     protected virtual void Update()
     {
@@ -113,5 +116,17 @@ public class Entity : MonoBehaviour
         rb.velocity = new Vector2(knockbackDir.x * (-facingDir), knockbackDir.y);
         yield return new WaitForSeconds(knockbackDuration);
         isKnockback = false;
+    }
+
+    public void MakeTransprent(bool transprent)
+    {
+        if(transprent)
+        {
+            spriteRenderer.color = Color.clear;
+        }
+        else
+        {
+            spriteRenderer.color = Color.white;
+        }
     }
 }

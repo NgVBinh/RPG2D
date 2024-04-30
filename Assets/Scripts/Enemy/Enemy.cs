@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class Enemy : Entity
@@ -13,7 +14,7 @@ public class Enemy : Entity
     [Header("Move Infor")]
     public float idleTime;
     public float moveSpeed;
-
+    private float defaultMoveSpeed;
     [Header("Attack Infor")]
     [SerializeField] protected LayerMask WhatIsPlayer;
     public float attackDistance;
@@ -25,6 +26,7 @@ public class Enemy : Entity
         base.Awake();
         stateMachine = new EnemyStateMachine();
 
+        defaultMoveSpeed = moveSpeed;
     }
     // Start is called before the first frame update
     protected override void Start()
@@ -51,6 +53,7 @@ public class Enemy : Entity
 
     public virtual void AnimationFinishTrigger() => stateMachine.currentState.AnimationFinishTrigger();
 
+    #region attack counter window
     public virtual void OpenCounterAttackWindow()
     {
         canbeStun = true;
@@ -62,7 +65,7 @@ public class Enemy : Entity
         canbeStun = false;
         counterImage.SetActive(false);
     }
-
+    #endregion
     public virtual bool CanBeStunned()
     {
         if (canbeStun)
@@ -71,5 +74,26 @@ public class Enemy : Entity
             return true;
         }    
         return false;
+    }
+
+    public virtual void FreezeTime(bool isFrozen)
+    {
+        if (isFrozen)
+        {
+            animator.speed = 0;
+            moveSpeed = 0;
+        }
+        else
+        {
+            animator.speed = 1;
+            moveSpeed = defaultMoveSpeed;
+        }
+    }
+
+    protected virtual IEnumerator FreezeTimeFor(float time)
+    {
+        FreezeTime(true);
+        yield return new WaitForSeconds(time);
+        FreezeTime(false);
     }
 }

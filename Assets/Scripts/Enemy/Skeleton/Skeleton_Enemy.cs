@@ -29,10 +29,10 @@ public class Skeleton_Enemy : Enemy
     {
         base.Update();
 
-        if(Input.GetKeyDown(KeyCode.U))
-        {
-            stateMachine.ChangeState(stunnedState);
-        }
+        //if(Input.GetKeyDown(KeyCode.U))
+        //{
+        //    stateMachine.ChangeState(stunnedState);
+        //}
     }
 
     public override bool CanBeStunned()

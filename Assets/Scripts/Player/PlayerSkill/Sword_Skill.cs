@@ -17,6 +17,8 @@ public class Sword_Skill : Skill
     [SerializeField] private GameObject swordThrowPref;
     [SerializeField] private Vector2 launchDir;
     [SerializeField] private float gravitySword;
+    [SerializeField] private float freezeTime;
+    [SerializeField] private float returnSpeed;
 
     private Vector2 finalDir;
 
@@ -30,6 +32,9 @@ public class Sword_Skill : Skill
     [Header("Bounce infor")]
     [SerializeField] private int amountOfBounce;
     [SerializeField] private float gravityBounceSword;
+    [SerializeField] private float speedBounce;
+    [SerializeField] private float distanceCanBounce;
+
 
     [Header("Pierce infor")]
     [SerializeField] private int amountOfPierce;
@@ -50,6 +55,7 @@ public class Sword_Skill : Skill
 
     protected override void Update()
     {
+        base.Update();
         finalDir = new Vector2(AimDirection().normalized.x * launchDir.x, AimDirection().normalized.y * launchDir.y);
 
         if (Input.GetMouseButton(1))
@@ -67,11 +73,11 @@ public class Sword_Skill : Skill
         GameObject newSword = Instantiate(swordThrowPref, player.transform.position, transform.rotation);
 
         Sword_Skill_Controller swordSkillScript = newSword.GetComponent<Sword_Skill_Controller>();
-        swordSkillScript.SetupSword(finalDir, gravitySword);
+        swordSkillScript.SetupSword(finalDir, gravitySword,freezeTime,returnSpeed);
 
         if (swordType == SwordType.Bounce)
         {
-            swordSkillScript.SetupBounce(true, amountOfBounce);
+            swordSkillScript.SetupBounce(true, amountOfBounce,speedBounce,distanceCanBounce);
         }
         else if (swordType == SwordType.Pierce)
         {
@@ -132,5 +138,8 @@ public class Sword_Skill : Skill
     {
         return (Vector2)player.transform.position + finalDir * t + 0.5f * (Physics2D.gravity * gravitySword) * (t * t);
     }
+
     #endregion
+
+
 }

@@ -20,7 +20,12 @@ public class PlayerGroundedState : PlayerState
     {
         base.Update();
 
-        if(Input.GetMouseButtonDown(1) && HasNoSword())
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            stateMachine.ChangeState(player.blackholdeState);
+        }
+
+        if(Input.GetMouseButtonDown(1) && HasNoSword() && player.skill.swordSkill.CanUseSkill())
         {
             stateMachine.ChangeState(player.aimSwordState);
         }

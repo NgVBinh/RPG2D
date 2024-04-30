@@ -36,6 +36,8 @@ public class Player : Entity
     public PlayerCounterAttackState counterAttackState { get; private set; }
     public PlayerAimSwordState aimSwordState { get; private set; }
     public PlayerCatchSwordState catchSwordState { get; private set; }
+
+    public PlayerBlackholdeState blackholdeState { get; private set; }
     #endregion
     protected override void Awake()
     {
@@ -54,6 +56,7 @@ public class Player : Entity
         counterAttackState = new PlayerCounterAttackState(this, stateMachine, "CounterAttack");
         aimSwordState = new PlayerAimSwordState(this, stateMachine, "AimSword");
         catchSwordState = new PlayerCatchSwordState(this, stateMachine, "CatchSword");
+        blackholdeState = new PlayerBlackholdeState(this, stateMachine, "Jump");
     }
     // Start is called before the first frame update
     protected override void Start()
@@ -115,4 +118,5 @@ public class Player : Entity
         stateMachine.ChangeState(catchSwordState);
         sword = null;
     }
+
 }
