@@ -75,6 +75,11 @@ public class Player : Entity
 
         stateMachine.currentState.Update();
         PlayerDashController();
+
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            skill.crystalSkill.CanUseSkill();
+        }
     }
 
     public void AnimationTrigger()

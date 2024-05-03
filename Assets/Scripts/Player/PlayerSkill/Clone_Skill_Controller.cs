@@ -8,7 +8,12 @@ public class Clone_Skill_Controller : MonoBehaviour
     [SerializeField] private Transform attackCheckTransform;
     [SerializeField] private float attackRadius;
 
+    private bool canDuplicateClone;
+    private int chanceToDuplicate;
+
     private Transform closestEnemy;
+
+    private int facingDir = 1;
 
     #region Components
     private SpriteRenderer sr;
@@ -35,11 +40,15 @@ public class Clone_Skill_Controller : MonoBehaviour
     }
 
 
-    public void SetUpClone(Transform newTransform, float cloneDuration, bool canAttack,Vector3 offset)
+    public void SetUpClone(Transform newTransform, float cloneDuration, bool canAttack,Vector3 offset, Transform closestEnemy,bool canDuplicate, int chanceToDuplicate)
     {
         transform.position = newTransform.position+offset;
         cloneTimerLosing = cloneDuration;
+        this.closestEnemy = closestEnemy;
+        this.canDuplicateClone = canDuplicate;
+        this.chanceToDuplicate = chanceToDuplicate;
         FaceClosestEnemy();
+
         if (canAttack)
         {
             animator.SetInteger("AttackCounter", Random.Range(1, 4));
@@ -60,32 +69,25 @@ public class Clone_Skill_Controller : MonoBehaviour
             if (collider.GetComponent<Enemy>() != null)
             {
                 collider.GetComponent<Enemy>().TakeDamage();
+
+                if(canDuplicateClone)
+                {
+                    if (Random.Range(0, 100) < chanceToDuplicate)
+                    {
+                        SkillManager.instance.cloneSkill.CreateClone(collider.transform, new Vector2(0.5f *facingDir,0));
+                    }
+                }
             }
         }
     }
 
     private void FaceClosestEnemy()
     {
-        float closestDistance = Mathf.Infinity;
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, 10);
-
-        foreach (Collider2D collider in colliders)
-        {
-            if (collider.GetComponent<Enemy>() != null)
-            {
-                float distanceToEnemy = Vector2.Distance(transform.position, collider.transform.position);
-                if (distanceToEnemy < closestDistance)
-                {
-                    closestDistance = distanceToEnemy;
-                    closestEnemy = collider.transform;
-                }
-            }
-        }
-
         if (closestEnemy != null)
         {
             if (transform.position.x > closestEnemy.transform.position.x)
             {
+                facingDir = -1;
                 transform.Rotate(0, 180, 0);
             }
 

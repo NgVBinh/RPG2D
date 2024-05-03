@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class PlayerCounterAttackState : PlayerState
 {
+    private bool canCreateClone;
     public PlayerCounterAttackState(Player player, PlayerStateMachine stateMachine, string animBoolName) : base(player, stateMachine, animBoolName)
     {
     }
@@ -10,6 +11,7 @@ public class PlayerCounterAttackState : PlayerState
     public override void Enter()
     {
         base.Enter();
+        canCreateClone = true;
         player.VelocityZero();
         stateTimer = player.counterDuration;
         player.animator.SetBool("CounterSuccess", false);
@@ -27,18 +29,24 @@ public class PlayerCounterAttackState : PlayerState
         Collider2D[] colliders = Physics2D.OverlapCircleAll(player.attackCheckTransform.position, player.attackRadius);
         foreach (Collider2D collider in colliders)
         {
-            if (collider.GetComponent<Enemy>()!=null)
+            if (collider.GetComponent<Enemy>() != null)
             {
                 if (collider.GetComponent<Enemy>().CanBeStunned())
                 {
                     stateTimer = 10;
                     player.animator.SetBool("CounterSuccess", true);
 
+                    if (canCreateClone)
+                    {
+                        canCreateClone = false;
+                        player.skill.cloneSkill.CreateCloneCounter(collider.transform);
+                    }
                 }
             }
         }
 
-        if(stateTimer <0 || triggerCalled) {
+        if (stateTimer < 0 || triggerCalled)
+        {
             stateMachine.ChangeState(player.idleState);
         }
     }

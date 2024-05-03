@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class BlackHole_Skill_Controller : MonoBehaviour
@@ -21,30 +22,35 @@ public class BlackHole_Skill_Controller : MonoBehaviour
     private List<Transform> enemysTarget;
     private List<GameObject> createdHotkey;
 
-    private float blackhldTimer;
+    private float blackholeTimer;
     public bool playerCanExitsState { get; private set; }
-    public void SetupBlackHole(int amountAttack, float cloneAttackCooldown, int maxSizeScale, float speedGrow, float speedShrink,float blackholdDuration)
+    public void SetupBlackHole(int amountAttack, float cloneAttackCooldown, int maxSizeScale, float speedGrow, float speedShrink, float blackholeDuration)
     {
         this.amountAttack = amountAttack;
         this.cloneAttackCooldown = cloneAttackCooldown;
         this.maxSizeScale = maxSizeScale;
         this.speedGrow = speedGrow;
         this.speedShrink = speedShrink;
-        this.blackhldTimer = blackholdDuration;
+        this.blackholeTimer = blackholeDuration;
+
         enemysTarget = new List<Transform>();
         createdHotkey = new List<GameObject>();
+
+        //if (SkillManager.instance.cloneSkill.crystalInseadOfClone)
+        //    PlayerManager.instance.player.MakeTransprent(false);
+
     }
 
     // Update is called once per frame
     void Update()
     {
 
-        blackhldTimer -= Time.deltaTime;
-        if (blackhldTimer < 0)
+        blackholeTimer -= Time.deltaTime;
+        if (blackholeTimer < 0)
         {
-            if(enemysTarget.Count > 0)
+            if (enemysTarget.Count > 0)
             {
-                blackhldTimer = Mathf.Infinity;
+                blackholeTimer = Mathf.Infinity;
                 ReleaseCloneAttack();
             }
             else
@@ -53,18 +59,21 @@ public class BlackHole_Skill_Controller : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            ReleaseCloneAttack();
-        }
+        //if (Input.GetKeyDown(KeyCode.R))
+        //{
+        //    ReleaseCloneAttack();
+        //}
 
         CloneAttackLogic();
 
-        if (CanGrow && !canShrink)
-        {
-            transform.localScale = Vector2.Lerp(transform.localScale, new Vector2(maxSizeScale, maxSizeScale), speedGrow * Time.deltaTime);
-        }
+        GrowBlackhole();
 
+        ShrinkBlackhole();
+
+    }
+
+    private void ShrinkBlackhole()
+    {
         if (canShrink)
         {
             transform.localScale = Vector2.Lerp(transform.localScale, new Vector2(-1, -1), speedShrink * Time.deltaTime);
@@ -74,7 +83,14 @@ public class BlackHole_Skill_Controller : MonoBehaviour
                 Destroy(gameObject);
             }
         }
+    }
 
+    private void GrowBlackhole()
+    {
+        if (CanGrow && !canShrink)
+        {
+            transform.localScale = Vector2.Lerp(transform.localScale, new Vector2(maxSizeScale, maxSizeScale), speedGrow * Time.deltaTime);
+        }
     }
 
     private void ReleaseCloneAttack()
@@ -85,20 +101,29 @@ public class BlackHole_Skill_Controller : MonoBehaviour
         cloneAttackReleased = true;
         canCreateHotkeys = false;
 
-        PlayerManager.instance.player.MakeTransprent(true);
+        if (!SkillManager.instance.cloneSkill.crystalInseadOfClone)
+            PlayerManager.instance.player.MakeTransprent(true);
     }
 
     private void CloneAttackLogic()
     {
         cloneAttackTimer -= Time.deltaTime;
 
-        if (cloneAttackReleased && cloneAttackTimer < 0 && amountAttack>0)
+        if (cloneAttackReleased && cloneAttackTimer < 0 && amountAttack > 0)
         {
             cloneAttackTimer = cloneAttackCooldown;
 
-            // set x position clone
-            float xOffset = (Random.Range(0, 2) == 0 ? 2 : -2);
-            SkillManager.instance.cloneSkill.CreateClone(enemysTarget[Random.Range(0, enemysTarget.Count)], new Vector3(xOffset, 0));
+            if (SkillManager.instance.cloneSkill.crystalInseadOfClone)
+            {
+                SkillManager.instance.crystalSkill.CreateCrystal();
+                SkillManager.instance.crystalSkill.CurrentCrystalChooseRandomTarget();
+            }
+            else
+            {
+                // set x position clone
+                float xOffset = (Random.Range(0, 2) == 0 ? 2 : -2);
+                SkillManager.instance.cloneSkill.CreateClone(enemysTarget[Random.Range(0, enemysTarget.Count)], new Vector3(xOffset, 0));
+            }
 
             amountAttack--;
             if (amountAttack <= 0)
@@ -107,7 +132,7 @@ public class BlackHole_Skill_Controller : MonoBehaviour
                 //FinishBlackholeAbility();
             }
         }
-       
+
     }
 
     private void FinishBlackholeAbility()
