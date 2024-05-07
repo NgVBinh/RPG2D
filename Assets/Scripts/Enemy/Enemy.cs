@@ -21,6 +21,8 @@ public class Enemy : Entity
     public float attackCoolDown;
     public float battleTime;
     [HideInInspector] public float lastTimeAttack;
+
+    public string lastAnimBoolName { get; private set; }
     protected override void Awake()
     {
         base.Awake();
@@ -95,5 +97,25 @@ public class Enemy : Entity
         FreezeTime(true);
         yield return new WaitForSeconds(time);
         FreezeTime(false);
+    }
+
+    public virtual void AssignLastAnimName(string lastBoolName)
+    {
+        lastAnimBoolName = lastBoolName;
+    }
+
+    public override void EntitySlowBy(float slowPercentage, float duration)
+    {
+        base.EntitySlowBy(slowPercentage, duration);
+        moveSpeed *= (1- slowPercentage);
+        animator.speed *= (1 - slowPercentage);
+        Invoke("ReturnDefaultSpeed", duration);
+    }
+
+    protected override void ReturnDefaultSpeed()
+    {
+        base.ReturnDefaultSpeed();
+        moveSpeed = defaultMoveSpeed;
+        animator.speed = 1;
     }
 }

@@ -19,7 +19,7 @@ public class SkeletonStunnedState : EnemyState
     public override void Exit()
     {
         base.Exit();
-        skeleton.entityFX.Invoke("CancelBlinkRed",0);
+        skeleton.entityFX.Invoke("CanelColorChange", 0);
         
     }
 

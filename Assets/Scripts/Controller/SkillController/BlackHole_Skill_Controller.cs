@@ -36,8 +36,8 @@ public class BlackHole_Skill_Controller : MonoBehaviour
         enemysTarget = new List<Transform>();
         createdHotkey = new List<GameObject>();
 
-        //if (SkillManager.instance.cloneSkill.crystalInseadOfClone)
-        //    PlayerManager.instance.player.MakeTransprent(false);
+        if (SkillManager.instance.cloneSkill.crystalInseadOfClone)
+            PlayerManager.instance.player.entityFX.MakeTransprent(false);
 
     }
 
@@ -102,7 +102,7 @@ public class BlackHole_Skill_Controller : MonoBehaviour
         canCreateHotkeys = false;
 
         if (!SkillManager.instance.cloneSkill.crystalInseadOfClone)
-            PlayerManager.instance.player.MakeTransprent(true);
+            PlayerManager.instance.player.entityFX.MakeTransprent(true);
     }
 
     private void CloneAttackLogic()
@@ -142,7 +142,7 @@ public class BlackHole_Skill_Controller : MonoBehaviour
         cloneAttackReleased = false;
         canShrink = true;
 
-        PlayerManager.instance.player.MakeTransprent(false);
+        PlayerManager.instance.player.entityFX.MakeTransprent(false);
 
     }
 

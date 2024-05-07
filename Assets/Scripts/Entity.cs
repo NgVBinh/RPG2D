@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -22,11 +23,14 @@ public class Entity : MonoBehaviour
     [SerializeField] private float knockbackDuration;
     private bool isKnockback;
 
+    public Action onFlipped;
+
     #region Components
     public Animator animator { get; private set; }
     public Rigidbody2D rb { get; private set; }
+    public CapsuleCollider2D capsuleCollider { get; private set; }
     public EntityFX entityFX { get; private set; }
-
+    public CharacterStats characterStats { get; private set; }
     public SpriteRenderer spriteRenderer { get; private set; }
     #endregion
 
@@ -39,9 +43,12 @@ public class Entity : MonoBehaviour
     {
         animator = GetComponentInChildren<Animator>();
         rb = GetComponent<Rigidbody2D>();
+        capsuleCollider = GetComponent<CapsuleCollider2D>();
 
         entityFX = GetComponentInChildren<EntityFX>();
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+
+        characterStats = GetComponent<CharacterStats>();
     }
     protected virtual void Update()
     {
@@ -58,7 +65,7 @@ public class Entity : MonoBehaviour
     }
     public void VelocityZero()
     {
-        if(isKnockback) return;
+        if (isKnockback) return;
         rb.velocity = Vector2.zero;
     }
 
@@ -69,14 +76,14 @@ public class Entity : MonoBehaviour
 
     public virtual bool WallDetected() => Physics2D.Raycast(wallCheckTransform.position, Vector2.right * facingDir, wallCheckDistance, WhatIsground);
 
-    public virtual void TakeDamage()
+    public virtual void BeDamagedEffect()
     {
         if (entityFX != null)
         {
             entityFX.StartCoroutine("HitEffect");
         }
         StartCoroutine("HitKnockback");
-        Debug.Log(transform.name + " be damaged");
+
     }
 
     protected virtual void OnDrawGizmos()
@@ -95,6 +102,9 @@ public class Entity : MonoBehaviour
         facingDir *= -1;
         isFacingRight = !isFacingRight;
         transform.Rotate(0, 180, 0);
+
+        if (onFlipped != null)
+            onFlipped();
     }
 
     public void FlipController(float xInput)
@@ -115,18 +125,19 @@ public class Entity : MonoBehaviour
         isKnockback = true;
         rb.velocity = new Vector2(knockbackDir.x * (-facingDir), knockbackDir.y);
         yield return new WaitForSeconds(knockbackDuration);
+        rb.velocity = Vector2.zero;
         isKnockback = false;
     }
 
-    public void MakeTransprent(bool transprent)
+    public virtual void Die()
     {
-        if(transprent)
-        {
-            spriteRenderer.color = Color.clear;
-        }
-        else
-        {
-            spriteRenderer.color = Color.white;
-        }
+
+    }
+
+    public virtual void EntitySlowBy(float slowPercentage, float duration){}
+
+    protected virtual void ReturnDefaultSpeed()
+    {
+
     }
 }

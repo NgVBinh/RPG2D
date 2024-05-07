@@ -30,7 +30,7 @@ public class PlayerBlackholdeState : PlayerState
     public override void Exit()
     {
         base.Exit();
-        player.MakeTransprent(false);
+        player.entityFX.MakeTransprent(false);
         player.rb.gravityScale = defaultGravity;
     }
 

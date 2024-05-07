@@ -9,6 +9,8 @@ public class Skeleton_Enemy : Enemy
     public SkeletonBattleState battleState { get; private set; }
     public SkeletonAttackState attackState { get; private set; }
     public SkeletonStunnedState stunnedState { get; private set; }
+
+    public SkeletonDieState dieState { get; private set; }
     #endregion
     protected override void Awake()
     {
@@ -18,6 +20,7 @@ public class Skeleton_Enemy : Enemy
         battleState = new SkeletonBattleState(this, stateMachine, "Move", this);
         attackState = new SkeletonAttackState(this, stateMachine, "Attack", this);
         stunnedState = new SkeletonStunnedState(this, stateMachine, "Stunned", this);
+        dieState = new SkeletonDieState(this, stateMachine, "Idle", this);
     }
     // Start is called before the first frame update
     protected override void Start()
@@ -43,5 +46,11 @@ public class Skeleton_Enemy : Enemy
             return true;
         }
         return false;
+    }
+
+    public override void Die()
+    {
+        base.Die();
+        stateMachine.ChangeState(dieState);
     }
 }
