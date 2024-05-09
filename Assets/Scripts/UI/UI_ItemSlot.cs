@@ -11,7 +11,7 @@ public class UI_ItemSlot : MonoBehaviour, IPointerDownHandler
     [SerializeField] private TextMeshProUGUI textAmountItem;
 
 
-    public void CleanUpSlot()
+    public virtual void CleanUpSlot()
     {
         item = null;
         image.color = Color.clear;
@@ -37,11 +37,20 @@ public class UI_ItemSlot : MonoBehaviour, IPointerDownHandler
     }
 
 
-    public void OnPointerDown(PointerEventData eventData)
+    public virtual void OnPointerDown(PointerEventData eventData)
     {
+        if(Input.GetKey(KeyCode.LeftControl))
+        {
+            Inventory.instance.RemoveItem(item.itemData);
+            Inventory.instance.UpdateSlotUI();
+
+            return;
+        }
+
         if(item.itemData.itemType == ItemType.Equipment)
         {
             Inventory.instance.EquipItem(item.itemData);
+            Inventory.instance.UpdateSlotUI();
         }
     }
 }

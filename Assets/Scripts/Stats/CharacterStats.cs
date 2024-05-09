@@ -43,9 +43,10 @@ public class CharacterStats : MonoBehaviour
     [SerializeField] private GameObject shockTrikePrefab;
 
     public Action onHealthChanged;
-    public bool isDead;
+    public bool isDead { get; private set; }
 
-    public int currentHealth { get; private set; }
+    //public int currentHealth { get; private set; }
+    public int currentHealth;
 
     private EntityFX entityFX;
     // Start is called before the first frame update
@@ -249,7 +250,7 @@ public class CharacterStats : MonoBehaviour
 
             // shock strike to target
             //GameObject shockStrike = Instantiate(shockTrikePrefab, target.transform.position, Quaternion.identity);
-            //ThunderStrike_Controller shockStrikeScript = shockStrike.GetComponent<ThunderStrike_Controller>();
+            //ThunderHit_Controller shockStrikeScript = shockStrike.GetComponent<ThunderHit_Controller>();
             //shockStrikeScript.SetupThunder(shockDamage, target);
 
             if (target.GetComponent<Player>()) return;
@@ -279,8 +280,8 @@ public class CharacterStats : MonoBehaviour
             if (nearEnemyTarget != null)
             {
                 GameObject shockStrikesToEnemyNear = Instantiate(shockTrikePrefab, transform.position, Quaternion.identity);
-                ThunderStrike_Controller thunderScripts = shockStrikesToEnemyNear.GetComponent<ThunderStrike_Controller>();
-                CharacterStats enemyNear = nearEnemyTarget.GetComponent<CharacterStats>();
+                ThunderHit_Controller thunderScripts = shockStrikesToEnemyNear.GetComponent<ThunderHit_Controller>();
+                //CharacterStats enemyNear = nearEnemyTarget.GetComponent<CharacterStats>();
                 thunderScripts.SetupThunder(shockDamage, nearEnemyTarget.GetComponent<CharacterStats>());
             }
 

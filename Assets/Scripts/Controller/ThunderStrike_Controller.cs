@@ -4,45 +4,25 @@ using UnityEngine;
 
 public class ThunderStrike_Controller : MonoBehaviour
 {
-    [SerializeField] private CharacterStats target;
-    [SerializeField] private float moveSpeed;
-
-    private int damage;
-
-    private bool isTrigger;
-
-    private Animator anim;
-
-    public void SetupThunder(int damage,CharacterStats target)
+    private void Start()
     {
-        this.damage = damage;
-        this.target = target;
-
-        anim = GetComponentInChildren<Animator>();
-
+        Invoke("SelfDestroy", 0.3f);
     }
 
-    // Update is called once per frame
-    void Update()
+    protected virtual void OnTriggerEnter2D(Collider2D collision)
     {
-        if (isTrigger) return;
-
-        transform.position = Vector2.MoveTowards(transform.position,target.transform.position,moveSpeed*Time.deltaTime);
-        transform.up =transform.position - target.transform.position;
-        if (Vector2.Distance(transform.position, target.transform.position) < 0.1f)
+        if (collision.GetComponent<Enemy>() != null)
         {
-            anim.SetTrigger("Hit");
-            transform.localScale = new Vector3(3, 3, 3);
-            transform.localRotation = Quaternion.identity;
-            anim.transform.localPosition = new Vector3(-0.1f, 0.2f, 0);
-            Invoke("DamageAndSelfDestroy", 0.15f);
-            isTrigger = true;
+            PlayerStats playerStats = PlayerManager.instance.player.GetComponent<PlayerStats>();
+            EnemyStats enemyTarget = collision.GetComponent<EnemyStats>();
+            playerStats.DoMagicalDamage(enemyTarget);
+
         }
     }
 
-    private void DamageAndSelfDestroy()
+    protected virtual void SelfDestroy()
     {
-        target.TakeDamage(damage);
-        Destroy(gameObject, 0.4f);
+        Destroy(gameObject);
+
     }
 }

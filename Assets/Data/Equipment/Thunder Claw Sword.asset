@@ -10,12 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c42b4c09883ce9943994ae5a94013fae, type: 3}
-  m_Name: Wooden Sword
+  m_Name: Thunder Claw Sword
   m_EditorClassIdentifier: 
   itemType: 1
-  itemName: Wooden Sword
-  icon: {fileID: -1055781779, guid: be55291aae08d434db3da3b59db3ab4a, type: 3}
+  itemName: Thunder Claw Sword
+  icon: {fileID: 1863113123, guid: be55291aae08d434db3da3b59db3ab4a, type: 3}
+  dropChance: 5
   equipmentType: 0
+  itemEffects:
+  - {fileID: 11400000, guid: 75f4e388799ee134e850bcd46f3e30cc, type: 2}
+  craftingMaterials:
+  - itemData: {fileID: 11400000, guid: 9f3e8444e67414c4e884fb771d00d3a5, type: 2}
+    stackSize: 1
+  - itemData: {fileID: 11400000, guid: d293bcdf44c0a44498d98c3aceec8027, type: 2}
+    stackSize: 2
   strength: 1
   agility: 1
   intelligence: 1
@@ -28,5 +36,5 @@ MonoBehaviour:
   armor: 0
   magicResistance: 0
   fireDamage: 0
-  iceDamage: 3
-  lightingDamage: 0
+  iceDamage: 0
+  lightingDamage: 5

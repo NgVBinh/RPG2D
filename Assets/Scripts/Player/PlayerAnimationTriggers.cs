@@ -19,8 +19,18 @@ public class PlayerAnimationTriggers : MonoBehaviour
             if(collider.GetComponent<Enemy>()!= null)
             {
                 EnemyStats target = collider.GetComponent<EnemyStats>();
-                 player.characterStats.DoDamage(target);
+                ExecuteEffectEquipment(target);
+                player.characterStats.DoDamage(target);
             }
+        }
+    }
+
+    private void ExecuteEffectEquipment(EnemyStats target)
+    {
+        ItemData_Equipment swordEquipment = Inventory.instance.GetEquipment(EquipmentType.Sword);
+        if (swordEquipment != null)
+        {
+            swordEquipment.ExecuteItemEffect(target.transform);
         }
     }
 

@@ -1,4 +1,5 @@
 
+using System.Collections.Generic;
 using UnityEngine;
 
 public enum EquipmentType
@@ -13,6 +14,11 @@ public enum EquipmentType
 public class ItemData_Equipment : ItemData
 {
     public EquipmentType equipmentType;
+
+    public ItemEffect[] itemEffects;
+
+    [Header("Craft Requirement")]
+    public List<InventoryItem> craftingMaterials;
 
     [Header("Major stats")]
     public int strength;    // 1 point increase damage by 1 and crit power by 1%
@@ -35,6 +41,14 @@ public class ItemData_Equipment : ItemData
     public int fireDamage;
     public int iceDamage;
     public int lightingDamage;
+
+    public void ExecuteItemEffect(Transform _targetTransform)
+    {
+        foreach(var item in itemEffects)
+        {
+            item.ExecuteEffect(_targetTransform);
+        }
+    }
 
     public void AddModifiers()
     {

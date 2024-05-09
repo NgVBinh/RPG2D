@@ -115,7 +115,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3102077771322406421}
-  - component: {fileID: 1841202427833643030}
+  - component: {fileID: 3407458651518318092}
   m_Layer: 0
   m_Name: ThunderHit
   m_TagString: Untagged
@@ -139,7 +139,7 @@ Transform:
   - {fileID: 4379027109597984442}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1841202427833643030
+--- !u!114 &3407458651518318092
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -148,7 +148,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5885127077000298139}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3abe7da53c2f6ee4cb1b909daa71a883, type: 3}
+  m_Script: {fileID: 11500000, guid: d67975f9c38757b41b662458450ee6bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}

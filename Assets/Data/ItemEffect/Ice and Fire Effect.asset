@@ -9,9 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: edebc396c9fd1c84e8ede8801db6ded3, type: 3}
-  m_Name: Item iron
+  m_Script: {fileID: 11500000, guid: 465c9624c0ebbb4428b1b6ebc9850a3f, type: 3}
+  m_Name: Ice and Fire Effect
   m_EditorClassIdentifier: 
-  itemType: 0
-  itemName: animal skin
-  icon: {fileID: 1025795234, guid: a9ca9a41598dd2e44b125928045c518f, type: 3}
+  iceAndFirePref: {fileID: 8258844881385114232, guid: 841ac9c9a7aec9f4288cfae156db9028, type: 3}
+  xVelocity: 10
