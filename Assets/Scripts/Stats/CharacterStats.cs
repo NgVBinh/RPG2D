@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 public class CharacterStats : MonoBehaviour
@@ -107,7 +108,31 @@ public class CharacterStats : MonoBehaviour
         }
     }
 
-    public virtual void DecreaseHealth(int damage)
+    public virtual void IncreaseStatBy(int amount,float duration,Stat statToModify)
+    {
+        StartCoroutine(StatModCoroutine(amount,duration,statToModify));
+    }
+
+    private IEnumerator StatModCoroutine(int amount, float duration, Stat statToModify)
+    {
+        statToModify.AddModifier(amount);
+        yield return new WaitForSeconds(duration);
+        statToModify.RemoveModifier(amount);
+    }
+
+    public virtual void IncreaseHealthBy(int amount)
+    {
+        currentHealth += amount;
+        if(currentHealth>GetMaxHealthValue())
+        {
+            currentHealth = GetMaxHealthValue();
+        }
+        if (onHealthChanged != null)
+        {
+            onHealthChanged();
+        }
+    }
+    protected virtual void DecreaseHealth(int damage)
     {
         currentHealth -= damage;
         if (onHealthChanged != null)

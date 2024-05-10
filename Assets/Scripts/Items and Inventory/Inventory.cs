@@ -5,7 +5,7 @@ public class Inventory : MonoBehaviour
 {
     public static Inventory instance;
 
-    public List<ItemData> startingItems;
+    public List<ItemData> startingItems = new List<ItemData>();
 
     public List<InventoryItem> inventoryItems;
     public Dictionary<ItemData, InventoryItem> dictionaryInventory;
@@ -25,6 +25,11 @@ public class Inventory : MonoBehaviour
     private UI_ItemSlot[] inventoryItemSlots;
     private UI_ItemSlot[] stashItemSlots;
     private UI_EquipmentSlot[] equipmentItemSlots;
+
+    private float lastTimeUsedFlask;
+    private float flaskCooldown;
+    private float lastTimeUsedArmorEffect;
+    private float armorEffectCooldown;
     private void Awake()
     {
         if (instance == null)
@@ -87,7 +92,7 @@ public class Inventory : MonoBehaviour
         newEquipment.AddModifiers();
         equipItems.Add(newItem);
         dictionaryEquip.Add(newEquipment, newItem);
-        
+
         RemoveItem(_item);
 
         //UpdateSlotUI();
@@ -123,7 +128,8 @@ public class Inventory : MonoBehaviour
             equipmentItemSlots[i].CleanUpSlot();
         }
 
-        for (int i = 0; i <equipmentItemSlots.Length;i++) {
+        for (int i = 0; i < equipmentItemSlots.Length; i++)
+        {
             foreach (KeyValuePair<ItemData_Equipment, InventoryItem> item in dictionaryEquip)
             {
                 if (item.Key.equipmentType == equipmentItemSlots[i].equipmentType)
@@ -235,15 +241,15 @@ public class Inventory : MonoBehaviour
         //UpdateSlotUI();
     }
 
-    public bool CanCraft(ItemData_Equipment itemToCraft,List<InventoryItem> requiredMaterials)
+    public bool CanCraft(ItemData_Equipment itemToCraft, List<InventoryItem> requiredMaterials)
     {
         List<InventoryItem> materialsToRemove = new List<InventoryItem>();
 
-        for(int i = 0; i < requiredMaterials.Count; i++)
+        for (int i = 0; i < requiredMaterials.Count; i++)
         {
             if (dictionaryStash.TryGetValue(requiredMaterials[i].itemData, out InventoryItem stashValue))
             {
-                if(stashValue.stackSize < requiredMaterials[i].stackSize)
+                if (stashValue.stackSize < requiredMaterials[i].stackSize)
                 {
                     Debug.Log("not enough materials: " + requiredMaterials[i].itemData.name);
                     return false;
@@ -260,7 +266,7 @@ public class Inventory : MonoBehaviour
             }
         }
 
-        foreach(InventoryItem materials in materialsToRemove)
+        foreach (InventoryItem materials in materialsToRemove)
         {
             RemoveItem(materials.itemData);
         }
@@ -275,19 +281,53 @@ public class Inventory : MonoBehaviour
 
     public ItemData_Equipment GetEquipment(EquipmentType _type)
     {
-        ItemData_Equipment equipedItem = null;
+        //ItemData_Equipment equipedItem = null;
         foreach (KeyValuePair<ItemData_Equipment, InventoryItem> item in dictionaryEquip)
         {
             if (item.Key.equipmentType == _type)
             {
-                equipedItem = item.Key;
-                return equipedItem;//
+                //equipedItem = item.Key;
+                return item.Key;//
             }
         }
 
-        return equipedItem;
+        return null;
     }
 
+    public void UseFlask()
+    {
+        ItemData_Equipment currentFlask = GetEquipment(EquipmentType.Flask);
+        if (currentFlask == null) return;
+
+        if (Time.time > lastTimeUsedFlask + flaskCooldown)
+        {
+            currentFlask.ExecuteItemEffect(null);
+            lastTimeUsedFlask = Time.time;
+            flaskCooldown = currentFlask.itemCooldown;
+        }
+        else
+        {
+            //Debug.Log("Cooldown use: "+currentFlask.name);
+        }
+    }
+
+    public bool CanUseArmorEffect()
+    {
+        ItemData_Equipment currentArmor = GetEquipment(EquipmentType.Armor);
+        if (currentArmor == null) return false;
+
+        if (Time.time > lastTimeUsedArmorEffect + armorEffectCooldown)
+        {
+            lastTimeUsedArmorEffect = Time.time;
+            armorEffectCooldown = currentArmor.itemCooldown;
+            return true;
+        }
+        else
+        {
+            //Debug.Log("Cooldown use: " + currentArmor.name);
+            return false;
+        }
+    }
     //private void Update()
     //{
     //    if (Input.GetKeyDown(KeyCode.X))

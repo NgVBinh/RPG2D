@@ -32,6 +32,16 @@ public class PlayerAnimationTriggers : MonoBehaviour
         {
             swordEquipment.ExecuteItemEffect(target.transform);
         }
+        //ItemData_Equipment armorEquipment = Inventory.instance.GetEquipment(EquipmentType.Armor);
+        //if (armorEquipment != null)
+        //{
+        //    armorEquipment.ExecuteItemEffect(target.transform);
+        //}
+        ItemData_Equipment amuletEquipment = Inventory.instance.GetEquipment(EquipmentType.Amulet);
+        if (amuletEquipment != null)
+        {
+            amuletEquipment.ExecuteItemEffect(target.transform);
+        }
     }
 
     private void ThrowSword()

@@ -1,6 +1,7 @@
 
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public enum EquipmentType
 {
@@ -15,6 +16,8 @@ public class ItemData_Equipment : ItemData
 {
     public EquipmentType equipmentType;
 
+    [Header("Equipment Item")]
+    public float itemCooldown;
     public ItemEffect[] itemEffects;
 
     [Header("Craft Requirement")]
@@ -41,6 +44,7 @@ public class ItemData_Equipment : ItemData
     public int fireDamage;
     public int iceDamage;
     public int lightingDamage;
+
 
     public void ExecuteItemEffect(Transform _targetTransform)
     {

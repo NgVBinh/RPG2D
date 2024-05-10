@@ -78,6 +78,8 @@ public class Enemy : Entity
         return false;
     }
 
+    public virtual void FreezeTimeFor(float _duration) => StartCoroutine(FreezeTimerCoroutine(_duration));
+
     public virtual void FreezeTime(bool isFrozen)
     {
         if (isFrozen)
@@ -92,7 +94,7 @@ public class Enemy : Entity
         }
     }
 
-    protected virtual IEnumerator FreezeTimeFor(float time)
+    protected virtual IEnumerator FreezeTimerCoroutine(float time)
     {
         FreezeTime(true);
         yield return new WaitForSeconds(time);

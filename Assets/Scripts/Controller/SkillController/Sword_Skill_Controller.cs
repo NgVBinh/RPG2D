@@ -238,7 +238,19 @@ public class Sword_Skill_Controller : MonoBehaviour
     private void SwordSkillDamage(Enemy enemy)
     {
         player.characterStats.DoDamage(enemy.GetComponent<CharacterStats>());
-        enemy.StartCoroutine("FreezeTimeFor", freezeTime);
+        enemy.FreezeTimeFor(freezeTime);
+
+        ItemData_Equipment swordEquipment = Inventory.instance.GetEquipment(EquipmentType.Sword);
+        if (swordEquipment != null)
+        {
+            swordEquipment.ExecuteItemEffect(enemy.transform);
+        }
+       
+        ItemData_Equipment amuletEquipment = Inventory.instance.GetEquipment(EquipmentType.Amulet);
+        if (amuletEquipment != null)
+        {
+            amuletEquipment.ExecuteItemEffect(enemy.transform);
+        }
     }
 
     private void StuckInto(Collider2D collision)

@@ -89,6 +89,11 @@ public class Player : Entity
         {
             skill.crystalSkill.CanUseSkill();
         }
+
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            Inventory.instance.UseFlask();
+        }
     }
 
     public void AnimationTrigger()
