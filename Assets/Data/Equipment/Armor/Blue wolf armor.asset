@@ -20,7 +20,11 @@ MonoBehaviour:
   itemCooldown: 30
   itemEffects:
   - {fileID: 11400000, guid: d7cc573102be7894d98c34b17ace9091, type: 2}
-  craftingMaterials: []
+  craftingMaterials:
+  - itemData: {fileID: 11400000, guid: d293bcdf44c0a44498d98c3aceec8027, type: 2}
+    stackSize: 3
+  - itemData: {fileID: 11400000, guid: 9f3e8444e67414c4e884fb771d00d3a5, type: 2}
+    stackSize: 2
   strength: 0
   agility: 1
   intelligence: 1

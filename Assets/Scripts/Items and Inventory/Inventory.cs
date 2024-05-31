@@ -20,12 +20,15 @@ public class Inventory : MonoBehaviour
     [SerializeField] private Transform inventorySlotsParent;
     [SerializeField] private Transform stashSlotsParent;
     [SerializeField] private Transform equipmentSlotsParent;
+    [SerializeField] private Transform statSlotsParent;
 
-    [Header("Stash UI")]
     private UI_ItemSlot[] inventoryItemSlots;
     private UI_ItemSlot[] stashItemSlots;
     private UI_EquipmentSlot[] equipmentItemSlots;
+    private UI_StatSlot[] statSlots;
 
+
+    [Header("Item cooldown")]
     private float lastTimeUsedFlask;
     private float flaskCooldown;
     private float lastTimeUsedArmorEffect;
@@ -55,7 +58,7 @@ public class Inventory : MonoBehaviour
         inventoryItemSlots = inventorySlotsParent.GetComponentsInChildren<UI_ItemSlot>();
         stashItemSlots = stashSlotsParent.GetComponentsInChildren<UI_ItemSlot>();
         equipmentItemSlots = equipmentSlotsParent.GetComponentsInChildren<UI_EquipmentSlot>();
-
+        statSlots = statSlotsParent.GetComponentsInChildren<UI_StatSlot>();
         AddStartingItems();
 
     }
@@ -113,21 +116,6 @@ public class Inventory : MonoBehaviour
     public void UpdateSlotUI()
     {
 
-        for (int i = 0; i < inventoryItemSlots.Length; i++)
-        {
-            inventoryItemSlots[i].CleanUpSlot();
-        }
-
-        for (int i = 0; i < stashItemSlots.Length; i++)
-        {
-            stashItemSlots[i].CleanUpSlot();
-        }
-
-        for (int i = 0; i < equipmentItemSlots.Length; i++)
-        {
-            equipmentItemSlots[i].CleanUpSlot();
-        }
-
         for (int i = 0; i < equipmentItemSlots.Length; i++)
         {
             foreach (KeyValuePair<ItemData_Equipment, InventoryItem> item in dictionaryEquip)
@@ -139,6 +127,21 @@ public class Inventory : MonoBehaviour
             }
         }
 
+        for (int i = 0; i < inventoryItemSlots.Length; i++)
+        {
+            inventoryItemSlots[i].CleanUpSlot();
+        }
+
+        for (int i = 0; i < stashItemSlots.Length; i++)
+        {
+            stashItemSlots[i].CleanUpSlot();
+        }
+
+        //for (int i = 0; i < equipmentItemSlots.Length; i++)
+        //{
+        //    equipmentItemSlots[i].CleanUpSlot();
+        //}
+
 
         for (int i = 0; i < inventoryItems.Count; i++)
         {
@@ -149,11 +152,29 @@ public class Inventory : MonoBehaviour
         {
             stashItemSlots[i].UpdateSlot(stashItems[i]);
         }
+
+        for (int i = 0; i < statSlots.Length; i++)
+        {
+            statSlots[i].UpdateStatValueUI();
+        }
+    }
+
+    public bool CanAddItem()
+    {
+
+        if (inventoryItems.Count >= inventoryItemSlots.Length)
+        {
+            Debug.Log("no more space");
+            return false;
+
+        }
+
+        return true;
     }
 
     public void AddItem(ItemData _item)
     {
-        if (_item.itemType == ItemType.Equipment)
+        if (_item.itemType == ItemType.Equipment && CanAddItem())
         {
             AddItemToInventory(_item);
         }
@@ -226,6 +247,7 @@ public class Inventory : MonoBehaviour
                 {
                     dictionaryStash.Remove(_item);
                     stashItems.Remove(value);
+
                 }
                 else
                 {
@@ -238,7 +260,7 @@ public class Inventory : MonoBehaviour
             }
         }
 
-        //UpdateSlotUI();
+        UpdateSlotUI();
     }
 
     public bool CanCraft(ItemData_Equipment itemToCraft, List<InventoryItem> requiredMaterials)
@@ -256,19 +278,23 @@ public class Inventory : MonoBehaviour
                 }
                 else
                 {
-                    materialsToRemove.Add(stashValue);
+                    InventoryItem itemToRemove = requiredMaterials[i];
+                    itemToRemove.stackSize = requiredMaterials[i].stackSize;
+                    materialsToRemove.Add(itemToRemove);
                 }
             }
             else
             {
-                Debug.Log("not enough materials");
                 return false;
             }
         }
-
+        // remove item used
         foreach (InventoryItem materials in materialsToRemove)
         {
-            RemoveItem(materials.itemData);
+            for (int i=0; i < materials.stackSize; i++)
+            {
+                RemoveItem(materials.itemData);
+            }              
         }
 
         AddItem(itemToCraft);

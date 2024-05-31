@@ -3,35 +3,41 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class UI_ItemSlot : MonoBehaviour, IPointerDownHandler
+public class UI_ItemSlot : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IPointerExitHandler
 {
     public InventoryItem item;
 
-    [SerializeField] private Image image;
-    [SerializeField] private TextMeshProUGUI textAmountItem;
+    [SerializeField] protected Image imageItem;
+    [SerializeField] protected TextMeshProUGUI textItem;
 
+    protected UI UI;
 
+    protected virtual void Start()
+    {
+        UI = GetComponentInParent<UI>();
+
+    }
     public virtual void CleanUpSlot()
     {
         item = null;
-        image.color = Color.clear;
-        image.sprite = null;
-        textAmountItem.text = "";
+        imageItem.color = Color.clear;
+        imageItem.sprite = null;
+        textItem.text = "";
     }
 
     public void UpdateSlot(InventoryItem _newitem)
     {
-        image.color = Color.white;
+        imageItem.color = Color.white;
 
         item = _newitem;
         if (item != null)
         {
-            image.sprite = item.itemData.icon;
+            imageItem.sprite = item.itemData.icon;
             if (item.stackSize > 1)
-                textAmountItem.text = item.stackSize.ToString();
-            else if (item.stackSize == 1) 
-                textAmountItem.text = "";
-            
+                textItem.text = item.stackSize.ToString();
+            else if (item.stackSize == 1)
+                textItem.text = "";
+
         }
 
     }
@@ -39,18 +45,36 @@ public class UI_ItemSlot : MonoBehaviour, IPointerDownHandler
 
     public virtual void OnPointerDown(PointerEventData eventData)
     {
-        if(Input.GetKey(KeyCode.LeftControl))
+        if (item == null) return;
+        UI.itemTooltip.HideTooltip();
+        if (Input.GetKey(KeyCode.LeftControl))
         {
             Inventory.instance.RemoveItem(item.itemData);
-            Inventory.instance.UpdateSlotUI();
+            //Inventory.instance.UpdateSlotUI();
 
             return;
         }
 
-        if(item.itemData.itemType == ItemType.Equipment)
+        if (item.itemData.itemType == ItemType.Equipment)
         {
             Inventory.instance.EquipItem(item.itemData);
-            Inventory.instance.UpdateSlotUI();
+            //Inventory.instance.UpdateSlotUI();
+            return;
         }
+
+        UI.itemTooltip.HideTooltip();
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        if (item == null) return;
+        UI.itemTooltip.ShowTooltip(item.itemData as ItemData_Equipment);
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        if (item == null) return;
+
+        UI.itemTooltip.HideTooltip();
     }
 }

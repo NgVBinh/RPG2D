@@ -2,6 +2,26 @@ using System;
 using System.Collections;
 using UnityEngine;
 
+public enum StatType
+{
+    strength,
+    agility,
+    intelligence,
+    vitality,
+
+    damage,
+    critChance,
+    critPower,
+
+    health,
+    armor,
+    evasion,
+    magicResistance,
+
+    fireDamage,
+    iceDamage,
+    lightingDamage,
+}
 public class CharacterStats : MonoBehaviour
 {
     [Header("Major stats")]
@@ -378,4 +398,27 @@ public class CharacterStats : MonoBehaviour
         return Mathf.RoundToInt(damage * totalCritPower);
     }
     #endregion
+
+    public virtual Stat GetStat(StatType statType)
+    {
+        if (statType == StatType.strength) { return strength; }
+        else if (statType == StatType.agility) { return agility; }
+        else if (statType == StatType.intelligence) { return intelligence; }
+        else if (statType == StatType.vitality) { return vitality; }
+
+        else if (statType == StatType.damage) { return damage; }
+        else if (statType == StatType.critChance) { return critChance; }
+        else if (statType == StatType.critPower) { return critPower; }
+
+        else if (statType == StatType.health) { return maxHealth; }
+        else if (statType == StatType.armor) { return armor; }
+        else if (statType == StatType.evasion) { return evasion; }
+        else if (statType == StatType.magicResistance) { return magicResistance; }
+
+        else if (statType == StatType.fireDamage) { return fireDamage; }
+        else if (statType == StatType.iceDamage) { return iceDamage; }
+        else if (statType == StatType.lightingDamage) { return lightingDamage; }
+
+        return null;
+    }
 }

@@ -45,13 +45,55 @@ public class ItemData_Equipment : ItemData
     public int iceDamage;
     public int lightingDamage;
 
-
+    private int description;
     public void ExecuteItemEffect(Transform _targetTransform)
     {
         foreach(var item in itemEffects)
         {
             item.ExecuteEffect(_targetTransform);
         }
+    }
+
+    public override string GetDescriptiom()
+    {
+        sb.Length = 0;
+        description = 0;
+        AddItemDescription(strength, "Strength");
+        AddItemDescription(agility, "Agility");
+        AddItemDescription(intelligence, "Intelligence");
+        AddItemDescription(vitality, "Vitality");
+
+        AddItemDescription(damage, "Damage");
+        AddItemDescription(critChance, "Crit Chance");
+        AddItemDescription(critPower, "Crit Power");
+
+        AddItemDescription(health, "Health");
+        AddItemDescription(evasion, "Evasion");
+        AddItemDescription(armor, "Armor");
+        AddItemDescription(magicResistance, "MagicResistance");
+
+        AddItemDescription(fireDamage, "Fire damage");
+        AddItemDescription(iceDamage, "Ice damage");
+        AddItemDescription(lightingDamage, "Lighting damage");
+
+        for(int i = 0; i < 5 - description; i++)
+        {
+            sb.AppendLine();
+            sb.Append("");
+        }
+
+        return sb.ToString();
+    }
+
+    private void AddItemDescription(int _value,string _name)
+    {
+        if (_value != 0)
+            if (sb.Length > 0)
+                sb.AppendLine();
+        if(_value > 0)
+            sb.Append("+ "+_value+" "+_name);
+
+        description++;
     }
 
     public void AddModifiers()

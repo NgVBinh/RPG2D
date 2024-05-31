@@ -43,6 +43,8 @@ public class Player : Entity
     public PlayerBlackholdeState blackholdeState { get; private set; }
     public PlayerDieState playerDieState { get; private set; }
     #endregion
+
+    public GameObject canvas;
     protected override void Awake()
     {
 
@@ -93,6 +95,18 @@ public class Player : Entity
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             Inventory.instance.UseFlask();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            if (canvas.activeInHierarchy)
+            {
+                canvas.SetActive(false);
+            }
+            else
+            {
+                canvas.SetActive(true);
+            }
         }
     }
 
