@@ -8,6 +8,7 @@ public class UI : MonoBehaviour
     [SerializeField] private GameObject craftUI;
     [SerializeField] private GameObject skillTreeUI;
     [SerializeField] private GameObject settingUI;
+    [SerializeField] private GameObject ingameUI;
 
     public UI_ItemTooltip itemTooltip;
     public UI_StatTooltip statTooltip;
@@ -22,8 +23,7 @@ public class UI : MonoBehaviour
 
     private void Start()
     {
-        SwitchTo(characterUI);
-        gameObject.SetActive(false);
+        SwitchTo(ingameUI);
     }
 
     public void SwitchTo(GameObject _menu)
@@ -36,5 +36,20 @@ public class UI : MonoBehaviour
 
         if(_menu != null)
         _menu.SetActive(true);
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            if (ingameUI.activeInHierarchy)
+            {
+                SwitchTo(characterUI);
+            }
+            else
+            {
+                SwitchTo(ingameUI);
+            }
+        }
     }
 }

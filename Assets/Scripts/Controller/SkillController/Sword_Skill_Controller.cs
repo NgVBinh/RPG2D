@@ -247,11 +247,11 @@ public class Sword_Skill_Controller : MonoBehaviour
         if (player.skill.swordSkill.vulnerableUnlocked)
             enemyStats.MakeVulnerableFor(vulnerableTime);
 
-        ItemData_Equipment swordEquipment = Inventory.instance.GetEquipment(EquipmentType.Sword);
-        if (swordEquipment != null)
-        {
-            swordEquipment.ExecuteItemEffect(enemy.transform);
-        }
+        //ItemData_Equipment swordEquipment = Inventory.instance.GetEquipment(EquipmentType.Sword);
+        //if (swordEquipment != null)
+        //{
+        //    swordEquipment.ExecuteItemEffect(enemy.transform);
+        //}
        
         ItemData_Equipment amuletEquipment = Inventory.instance.GetEquipment(EquipmentType.Amulet);
         if (amuletEquipment != null)

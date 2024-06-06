@@ -20,7 +20,7 @@ public class PlayerGroundedState : PlayerState
     {
         base.Update();
 
-        if (Input.GetKeyDown(KeyCode.R) && player.skill.blackholeSkill.blackholdUnlocked)
+        if (Input.GetKeyDown(KeyCode.R) && player.skill.blackholeSkill.blackholdUnlocked && player.skill.blackholeSkill.CanUseSkill())
         {
             stateMachine.ChangeState(player.blackholdeState);
         }

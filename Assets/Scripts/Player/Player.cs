@@ -44,7 +44,7 @@ public class Player : Entity
     public PlayerDieState playerDieState { get; private set; }
     #endregion
 
-    public GameObject canvas;
+    public GameObject characterUI;
     protected override void Awake()
     {
 
@@ -87,9 +87,9 @@ public class Player : Entity
         stateMachine.currentState.Update();
         PlayerDashController();
 
-        if (Input.GetKeyDown(KeyCode.E) && skill.parrySkill.parryUnlocked)
+        if (Input.GetKeyDown(KeyCode.E)&&skill.parrySkill.CanUseSkill() && skill.parrySkill.parryUnlocked)
         {
-            Debug.Log("counter attack");
+            //Debug.Log("counter attack");
             stateMachine.ChangeState(counterAttackState);
         }
 
@@ -103,17 +103,17 @@ public class Player : Entity
             Inventory.instance.UseFlask();
         }
 
-        if (Input.GetKeyDown(KeyCode.Tab))
-        {
-            if (canvas.activeInHierarchy)
-            {
-                canvas.SetActive(false);
-            }
-            else
-            {
-                canvas.SetActive(true);
-            }
-        }
+        //if (Input.GetKeyDown(KeyCode.Tab))
+        //{
+        //    if (characterUI.activeInHierarchy)
+        //    {
+        //        characterUI.SetActive(false);
+        //    }
+        //    else
+        //    {
+        //        characterUI.SetActive(true);
+        //    }
+        //}
     }
 
     public void AnimationTrigger()
