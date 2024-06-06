@@ -20,6 +20,8 @@ MonoBehaviour:
   itemCooldown: 30
   itemEffects:
   - {fileID: 11400000, guid: d7cc573102be7894d98c34b17ace9091, type: 2}
+  itemEffectDescription: 'Unique: Being attacked when health is below 30% will freeze
+    enemies within range.'
   craftingMaterials:
   - itemData: {fileID: 11400000, guid: d293bcdf44c0a44498d98c3aceec8027, type: 2}
     stackSize: 3

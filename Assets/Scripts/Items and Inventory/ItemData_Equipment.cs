@@ -19,6 +19,8 @@ public class ItemData_Equipment : ItemData
     [Header("Equipment Item")]
     public float itemCooldown;
     public ItemEffect[] itemEffects;
+    [TextArea]
+    public string itemEffectDescription;
 
     [Header("Craft Requirement")]
     public List<InventoryItem> craftingMaterials;
@@ -81,7 +83,11 @@ public class ItemData_Equipment : ItemData
             sb.AppendLine();
             sb.Append("");
         }
-
+        if(itemEffectDescription.Length > 0)
+        {
+            sb.AppendLine();
+            sb.Append(itemEffectDescription);
+        }
         return sb.ToString();
     }
 

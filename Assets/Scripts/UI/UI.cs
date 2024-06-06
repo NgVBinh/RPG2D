@@ -4,9 +4,28 @@ using UnityEngine;
 
 public class UI : MonoBehaviour
 {
+    [SerializeField] private GameObject characterUI;
+    [SerializeField] private GameObject craftUI;
+    [SerializeField] private GameObject skillTreeUI;
+    [SerializeField] private GameObject settingUI;
+
     public UI_ItemTooltip itemTooltip;
     public UI_StatTooltip statTooltip;
+    public UI_SkillToolTip skillToolTip;
+
     public UI_CraftWindow craftWindow;
+
+    private void Awake()
+    {
+        SwitchTo(skillTreeUI);
+    }
+
+    private void Start()
+    {
+        SwitchTo(characterUI);
+        gameObject.SetActive(false);
+    }
+
     public void SwitchTo(GameObject _menu)
     {
 

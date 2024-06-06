@@ -36,10 +36,12 @@ public class PlayerCounterAttackState : PlayerState
                     stateTimer = 10;
                     player.animator.SetBool("CounterSuccess", true);
 
+                    SkillManager.instance.parrySkill.UseSkill(); // restore when counter attack enemy
+
                     if (canCreateClone)
                     {
                         canCreateClone = false;
-                        player.skill.cloneSkill.CreateCloneCounter(collider.transform);
+                        player.skill.parrySkill.MakeMirageOnParry(collider.transform);
                     }
                 }
             }

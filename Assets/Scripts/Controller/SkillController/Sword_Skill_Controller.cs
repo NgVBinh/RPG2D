@@ -8,6 +8,7 @@ public class Sword_Skill_Controller : MonoBehaviour
     private CircleCollider2D circleCollider;
 
     private float freezeTime;
+    private float vulnerableTime=5f;
 
     private float returnSpeed;
 
@@ -101,14 +102,14 @@ public class Sword_Skill_Controller : MonoBehaviour
         {
             transform.position = Vector2.MoveTowards(transform.position, enemysTransform[enemyTarget].position, speedBounce * Time.deltaTime);
 
-            if (Vector2.Distance(transform.position, enemysTransform[enemyTarget].position) < 0.05f)
+            if (Vector2.Distance(transform.position, enemysTransform[enemyTarget].position) < 0.1f)
             {
                 SwordSkillDamage(enemysTransform[enemyTarget].GetComponent<Enemy>());
 
                 enemyTarget++;
                 amountOfBounce--;
 
-                if (amountOfBounce <= 0)
+                if (amountOfBounce <= 1)
                 {
                     isBouncing = false;
                     isReturning = true;
@@ -237,8 +238,14 @@ public class Sword_Skill_Controller : MonoBehaviour
 
     private void SwordSkillDamage(Enemy enemy)
     {
-        player.characterStats.DoDamage(enemy.GetComponent<CharacterStats>());
-        enemy.FreezeTimeFor(freezeTime);
+        EnemyStats enemyStats = enemy.GetComponent<EnemyStats>();
+        player.characterStats.DoDamage(enemyStats);
+
+        if(player.skill.swordSkill.timeStopUnlocked)
+            enemy.FreezeTimeFor(freezeTime);
+
+        if (player.skill.swordSkill.vulnerableUnlocked)
+            enemyStats.MakeVulnerableFor(vulnerableTime);
 
         ItemData_Equipment swordEquipment = Inventory.instance.GetEquipment(EquipmentType.Sword);
         if (swordEquipment != null)

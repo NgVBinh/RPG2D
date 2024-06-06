@@ -20,6 +20,7 @@ MonoBehaviour:
   itemCooldown: 0
   itemEffects:
   - {fileID: 11400000, guid: 75f4e388799ee134e850bcd46f3e30cc, type: 2}
+  itemEffectDescription: 'Unique: Attack causes lightning to strike the enemy'
   craftingMaterials:
   - itemData: {fileID: 11400000, guid: 9f3e8444e67414c4e884fb771d00d3a5, type: 2}
     stackSize: 3

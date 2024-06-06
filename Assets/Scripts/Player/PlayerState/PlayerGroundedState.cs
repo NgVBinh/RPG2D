@@ -20,12 +20,12 @@ public class PlayerGroundedState : PlayerState
     {
         base.Update();
 
-        if (Input.GetKeyDown(KeyCode.R))
+        if (Input.GetKeyDown(KeyCode.R) && player.skill.blackholeSkill.blackholdUnlocked)
         {
             stateMachine.ChangeState(player.blackholdeState);
         }
 
-        if(Input.GetMouseButtonDown(1) && HasNoSword() && player.skill.swordSkill.CanUseSkill())
+        if(Input.GetMouseButtonDown(1)&&SkillManager.instance.swordSkill.swordUnlocked && HasNoSword() && player.skill.swordSkill.CanUseSkill())
         {
             stateMachine.ChangeState(player.aimSwordState);
         }

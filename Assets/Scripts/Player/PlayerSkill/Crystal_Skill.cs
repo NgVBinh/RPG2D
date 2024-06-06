@@ -1,31 +1,78 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Crystal_Skill : Skill
 {
     [SerializeField] private GameObject crystalPrefab;
 
     [SerializeField] private float crystalDuration;
+
+    [Header("Crystal simple")]
+    [SerializeField] private UI_SkillTreeSlot crystalSkill;
+    public bool crystalUnlocked ;//{ get;private set; }
+
+    [Header("Crystal Mirage")]
+    [SerializeField] private UI_SkillTreeSlot cloneInsteadCrystalSkill;
     [SerializeField] private bool cloneInsteadOfCrystal;
 
     [Header("crystal Explode")]
+    [SerializeField] private UI_SkillTreeSlot crystalExplodeSkill;
     [SerializeField] private bool canExplode;
 
     [Header("crystal Move")]
+    [SerializeField] private UI_SkillTreeSlot crystalMoveSkill;
     [SerializeField] private bool canMove;
     [SerializeField] private float moveSpeed;
 
     [Header("Multi stacking crystal")]
+    [SerializeField] private UI_SkillTreeSlot crystalMultiStackSkill;
     [SerializeField] private bool canUseMultiStack;
     [SerializeField] private int amountOfStacks;
     [SerializeField] private float multiStackCooldown;
     [SerializeField] private float useTimeWindow;
     [SerializeField] private List<GameObject> crystalLeft = new List<GameObject>();
 
-
     private GameObject currentCrystal;
+    #region Unlock Skill
+    private void UnlockCrystalSkill()
+    {
+        if (crystalSkill.unlockded)
+            crystalUnlocked = true;
+    }
+    private void UnlockCrystalMirageSkill()
+    {
+        if (cloneInsteadCrystalSkill.unlockded)
+            cloneInsteadOfCrystal = true;
+    }
 
+    private void UnlockCrystalExplpodeSkill()
+    {
+        if (crystalExplodeSkill.unlockded)
+            canExplode = true;
+    }
+    private void UnlockCrystalMoveSkill()
+    {
+        if (crystalMoveSkill.unlockded)
+            canMove = true;
+    }
+
+    private void UnlockCrystalMultiStackSkill()
+    {
+        if (crystalMultiStackSkill.unlockded)
+            canUseMultiStack = true;
+    }
+    #endregion
+    protected override void Start()
+    {
+        base.Start();
+        crystalSkill.GetComponent<Button>().onClick.AddListener(UnlockCrystalSkill);
+        cloneInsteadCrystalSkill.GetComponent<Button>().onClick.AddListener(UnlockCrystalMirageSkill);
+        crystalExplodeSkill.GetComponent<Button>().onClick.AddListener(UnlockCrystalExplpodeSkill);
+        crystalMoveSkill.GetComponent<Button>().onClick.AddListener(UnlockCrystalMoveSkill);
+        crystalMultiStackSkill.GetComponent<Button>().onClick.AddListener(UnlockCrystalMultiStackSkill);
+    }
     public override void UseSkill()
     {
         base.UseSkill();

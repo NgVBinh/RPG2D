@@ -7,6 +7,7 @@ public class Clone_Skill_Controller : MonoBehaviour
     private float cloneTimerLosing;
     [SerializeField] private float cloneLossingSpeed;
 
+    private float cloneAttackMultiplier;
     [SerializeField] private Transform attackCheckTransform;
     [SerializeField] private float attackRadius;
 
@@ -42,10 +43,11 @@ public class Clone_Skill_Controller : MonoBehaviour
     }
 
 
-    public void SetUpClone(Transform newTransform, float cloneDuration, bool canAttack,Vector3 offset, Transform closestEnemy,bool canDuplicate, int chanceToDuplicate,Player player)
+    public void SetUpClone(Transform newTransform, float cloneDuration, bool canAttack,float attackMultiplier,Vector3 offset, Transform closestEnemy,bool canDuplicate, int chanceToDuplicate,Player player)
     {
         transform.position = newTransform.position+offset;
         cloneTimerLosing = cloneDuration;
+        cloneAttackMultiplier = attackMultiplier;
         this.closestEnemy = closestEnemy;
         this.canDuplicateClone = canDuplicate;
         this.chanceToDuplicate = chanceToDuplicate;
@@ -71,7 +73,21 @@ public class Clone_Skill_Controller : MonoBehaviour
         {
             if (collider.GetComponent<Enemy>() != null)
             {
-                player.characterStats.DoDamage(collider.GetComponent<CharacterStats>());
+                //player.characterStats.DoDamage(collider.GetComponent<CharacterStats>());
+                PlayerStats playerStats = player.GetComponent<PlayerStats>();
+                EnemyStats enemyStats = collider.GetComponent<EnemyStats>();
+
+                playerStats.CloneDoDamage(enemyStats, cloneAttackMultiplier);
+
+                if (player.skill.cloneSkill.aggresiveCloneUnlock)
+                {
+                    ItemData_Equipment swordEquipment = Inventory.instance.GetEquipment(EquipmentType.Sword);
+                    if (swordEquipment != null)
+                    {
+                        swordEquipment.ExecuteItemEffect(collider.transform);
+                    }
+                }
+
                 if(canDuplicateClone)
                 {
                     if (Random.Range(0, 100) < chanceToDuplicate)

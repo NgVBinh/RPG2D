@@ -17,8 +17,10 @@ MonoBehaviour:
   icon: {fileID: 678717410, guid: be55291aae08d434db3da3b59db3ab4a, type: 3}
   dropChance: 5
   equipmentType: 0
+  itemCooldown: 0
   itemEffects:
   - {fileID: 11400000, guid: fb45f6842f721394d8c931f7871fb89f, type: 2}
+  itemEffectDescription: 'Unique: Recovers 10% health per attack'
   craftingMaterials:
   - itemData: {fileID: 11400000, guid: 9f3e8444e67414c4e884fb771d00d3a5, type: 2}
     stackSize: 1

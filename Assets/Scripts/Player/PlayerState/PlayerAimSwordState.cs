@@ -26,7 +26,7 @@ public class PlayerAimSwordState : PlayerState
 
         player.VelocityZero();
 
-        if(Input.GetMouseButtonUp(1)) {
+        if(Input.GetMouseButtonUp(1)  && SkillManager.instance.swordSkill.swordUnlocked) {
             stateMachine.ChangeState(player.idleState);
         }
 

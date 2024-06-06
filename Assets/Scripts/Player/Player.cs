@@ -87,7 +87,13 @@ public class Player : Entity
         stateMachine.currentState.Update();
         PlayerDashController();
 
-        if (Input.GetKeyDown(KeyCode.Q))
+        if (Input.GetKeyDown(KeyCode.E) && skill.parrySkill.parryUnlocked)
+        {
+            Debug.Log("counter attack");
+            stateMachine.ChangeState(counterAttackState);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Q) && skill.crystalSkill.crystalUnlocked)
         {
             skill.crystalSkill.CanUseSkill();
         }
@@ -128,16 +134,13 @@ public class Player : Entity
     {
         if (WallDetected()) return;
 
-        if (Input.GetKeyDown(KeyCode.LeftShift) && SkillManager.instance.dashSkill.CanUseSkill())
+        if (!SkillManager.instance.dashSkill.dashUnlocked) return;
+
+        if (Input.GetKeyDown(KeyCode.LeftShift) && skill.dashSkill.CanUseSkill())
         {
             dashDir = Input.GetAxisRaw("Horizontal");
             if (dashDir == 0) dashDir = facingDir;
             stateMachine.ChangeState(dashState);
-        }
-
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            stateMachine.ChangeState(counterAttackState);
         }
     }
 

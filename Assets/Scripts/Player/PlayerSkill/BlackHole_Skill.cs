@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BlackHole_Skill : Skill
 {
@@ -15,6 +16,16 @@ public class BlackHole_Skill : Skill
     [SerializeField] private float blackholeDuration;
 
     protected BlackHole_Skill_Controller currentBlackhole;
+
+    [Header("Blackhokd Skill")]
+    [SerializeField] private UI_SkillTreeSlot blackholdSkill;
+    public bool blackholdUnlocked;
+
+    protected override void Start()
+    {
+        base.Start();
+        blackholdSkill.GetComponent<Button>().onClick.AddListener(UnlockBlackhold);
+    }
     public override bool CanUseSkill()
     {
         return base.CanUseSkill();
@@ -45,5 +56,13 @@ public class BlackHole_Skill : Skill
     public float GetBlackholeRadius()
     {
         return (float)maxSizeScale / 2;
+    }
+
+    private void UnlockBlackhold()
+    {
+        if (blackholdSkill.unlockded)
+        {
+            blackholdUnlocked = true;
+        }
     }
 }
