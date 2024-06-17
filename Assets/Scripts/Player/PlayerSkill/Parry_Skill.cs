@@ -62,4 +62,11 @@ public class Parry_Skill : Skill
             SkillManager.instance.cloneSkill.CreateCloneWithDelay(spawnTransform);
         }
     }
+
+    protected override void CheckUnlockSkill()
+    {
+        UnlockParrySkill();
+        UnlockParryRestoreSkill();
+        UnlockParryWithMirageSkill();
+    }
 }

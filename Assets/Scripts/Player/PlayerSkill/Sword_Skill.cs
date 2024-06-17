@@ -173,6 +173,17 @@ public class Sword_Skill : Skill
         if (vulnerableSkill.unlockded)
             vulnerableUnlocked = true;
     }
+
+    protected override void CheckUnlockSkill()
+    {
+        UnlockSwordSkill();
+        UnlockSpinSwordSkill();
+        UnlockBouncySwordSkill();
+        UnlockPierceSwordSkill();
+        UnlockTimeStopSkill();
+        UnlockVulnerableSkill();
+    }
+
     #endregion
 
     #region AimSword

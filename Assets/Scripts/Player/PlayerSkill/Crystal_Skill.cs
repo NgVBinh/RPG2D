@@ -38,8 +38,12 @@ public class Crystal_Skill : Skill
     #region Unlock Skill
     private void UnlockCrystalSkill()
     {
+
         if (crystalSkill.unlockded)
+        {
             crystalUnlocked = true;
+            Debug.Log("aaa");
+        }
     }
     private void UnlockCrystalMirageSkill()
     {
@@ -72,6 +76,7 @@ public class Crystal_Skill : Skill
         crystalExplodeSkill.GetComponent<Button>().onClick.AddListener(UnlockCrystalExplpodeSkill);
         crystalMoveSkill.GetComponent<Button>().onClick.AddListener(UnlockCrystalMoveSkill);
         crystalMultiStackSkill.GetComponent<Button>().onClick.AddListener(UnlockCrystalMultiStackSkill);
+
     }
     public override void UseSkill()
     {
@@ -159,5 +164,15 @@ public class Crystal_Skill : Skill
 
         coolDownTimer = multiStackCooldown;
         RefilCrystal();
+    }
+
+    protected override void CheckUnlockSkill()
+    {
+        Debug.Log("???????");
+        UnlockCrystalSkill();
+        UnlockCrystalMirageSkill();
+        UnlockCrystalExplpodeSkill();
+        UnlockCrystalMoveSkill();
+        UnlockCrystalMultiStackSkill();
     }
 }

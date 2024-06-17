@@ -12,6 +12,7 @@ public class Skill : MonoBehaviour
     protected virtual void Start()
     {
         player = PlayerManager.instance.player;
+        CheckUnlockSkill();
     }
 
     // Update is called once per frame
@@ -38,7 +39,10 @@ public class Skill : MonoBehaviour
         // do something
 
     }
+    protected virtual void CheckUnlockSkill()
+    {
 
+    }
     protected Transform findClosestEnemy(Transform checkTransform)
     {
         Collider2D[] colliders = Physics2D.OverlapCircleAll(checkTransform.position, 10);

@@ -30,6 +30,7 @@ public class ItemDrop : MonoBehaviour
             dropList.Remove(newItemDrop);
 
             DropItem(newItemDrop);
+            Debug.Log(i);
         }
     }
 

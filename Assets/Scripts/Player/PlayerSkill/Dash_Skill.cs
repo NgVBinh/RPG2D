@@ -62,4 +62,11 @@ public class Dash_Skill : Skill
         if (cloneOnArrialUnlocked)
             SkillManager.instance.cloneSkill.CreateClone(player.transform, Vector2.zero);
     }
+
+    protected override void CheckUnlockSkill()
+    {
+        UnlockDash();
+        UnlockCloneOnDash();
+        UnlockCloneOnArrival();
+    }
 }

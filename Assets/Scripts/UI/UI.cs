@@ -23,6 +23,7 @@ public class UI : MonoBehaviour
 
     private void Start()
     {
+       // SwitchTo(skillTreeUI);
         SwitchTo(ingameUI);
     }
 

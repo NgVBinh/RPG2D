@@ -102,5 +102,13 @@ public class Clone_Skill : Skill
             attackMultiplier = multiCloneAttackMultiplier;
         }
     }
+
+    protected override void CheckUnlockSkill()
+    {
+        UnlockCloneSkill();
+        UnlockAggresiveCloneSkill();
+        UnlockCrystalInsteadCloneSkill();
+        UnlockMultiCloneSkill();
+    }
     #endregion
 }

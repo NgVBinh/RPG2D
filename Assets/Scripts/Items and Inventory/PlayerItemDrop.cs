@@ -19,12 +19,15 @@ public class PlayerItemDrop : ItemDrop
             {
                 DropItem(item.itemData);
                 itemsToUnequip.Add(item);
+                
             }
         }
 
-        foreach(InventoryItem item in itemsToUnequip)
+        foreach (InventoryItem item in itemsToUnequip)
         {
-            inventory.UnequipItem(item.itemData as ItemData_Equipment);
+            ItemData_Equipment equipmentRemove = item.itemData as ItemData_Equipment;
+            inventory.UnequipItem(equipmentRemove);
+            inventory.RemoveItemEquipment(equipmentRemove.equipmentType);      
         }
 
 

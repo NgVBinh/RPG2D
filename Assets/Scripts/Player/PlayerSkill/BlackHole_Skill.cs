@@ -65,4 +65,9 @@ public class BlackHole_Skill : Skill
             blackholdUnlocked = true;
         }
     }
+
+    protected override void CheckUnlockSkill()
+    {
+        UnlockBlackhold();
+    }
 }

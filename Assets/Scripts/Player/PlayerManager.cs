@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerManager : MonoBehaviour
+public class PlayerManager : MonoBehaviour,ISaveManager
 {
     public static PlayerManager instance;
 
@@ -31,5 +31,15 @@ public class PlayerManager : MonoBehaviour
 
         currency-=_price;
         return true;
+    }
+
+    public void LoadData(GameData gameData)
+    {
+        this.currency = gameData.currency;
+    }
+
+    public void SaveData(ref GameData gameData)
+    {
+        gameData.currency = this.currency;
     }
 }
